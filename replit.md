@@ -200,6 +200,10 @@ Changelog:
 - July 14, 2025. Updated Terms of Service content to match official Shopstr documentation with focus on permissionless marketplace nature and decentralized platform responsibilities
 - July 14, 2025. Updated Privacy Policy content to match official Shopstr documentation with emphasis on minimal data collection and user privacy control in permissionless systems
 - July 15, 2025. Added .well-known/nostr.json file for Nostr protocol NIP-05 identifier support, enabling domain-based verification at /.well-known/nostr.json endpoint
+- July 15, 2025. Added comprehensive Open Graph meta tags for enhanced social media previews on Facebook, Twitter, and other platforms
+- July 15, 2025. Updated Open Graph image to use Shopstr icon (favicon.png) for simpler, cleaner social media previews
+- July 15, 2025. Added favicon using Shopstr icon for better browser tab identification and branding consistency
+- July 15, 2025. Enhanced SEO with additional meta tags including keywords, author, robots, and theme-color for mobile browsers
 ```
 
 ## User Preferences

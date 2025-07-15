@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 91%);
+  --foreground: hsl(0, 0%, 13%);
+  --muted: hsl(0, 0%, 85%);
+  --muted-foreground: hsl(0, 0%, 35%);
+  --popover: hsl(0, 0%, 91%);
+  --popover-foreground: hsl(0, 0%, 13%);
+  --card: hsl(0, 0%, 95%);
+  --card-foreground: hsl(0, 0%, 13%);
+  --border: hsl(0, 0%, 80%);
+  --input: hsl(0, 0%, 80%);
+  --primary: hsl(288, 70%, 49%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 85%);
+  --secondary-foreground: hsl(0, 0%, 13%);
+  --accent: hsl(45, 93%, 61%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 91%);
+  --ring: hsl(0, 0%, 13%);
+  --radius: 0.75rem;
+  --neutral: hsl(0, 0%, 91%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 13%);
+  --foreground: hsl(0, 0%, 91%);
+  --muted: hsl(0, 0%, 20%);
+  --muted-foreground: hsl(0, 0%, 65%);
+  --popover: hsl(0, 0%, 13%);
+  --popover-foreground: hsl(0, 0%, 91%);
+  --card: hsl(0, 0%, 16%);
+  --card-foreground: hsl(0, 0%, 91%);
+  --border: hsl(0, 0%, 25%);
+  --input: hsl(0, 0%, 25%);
+  --primary: hsl(288, 70%, 49%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 20%);
+  --secondary-foreground: hsl(0, 0%, 91%);
+  --accent: hsl(45, 93%, 61%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 91%);
+  --ring: hsl(0, 0%, 83%);
+  --radius: 0.75rem;
+  --neutral: hsl(0, 0%, 13%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      hsl(0, 0%, 13%) 0%,
+      hsl(0, 0%, 16%) 100%
+    );
+  }
+
+  .tech-badge {
+    background: linear-gradient(
+      135deg,
+      hsl(45, 93%, 61%) 0%,
+      hsl(45, 93%, 55%) 100%
+    );
+  }
+
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 32px 64px -12px rgb(0 0 0 / 0.15),
+      0 16px 32px -8px rgb(0 0 0 / 0.1);
+  }
+
+  .modern-card {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .floating-element {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .orbit-element {
+    animation: orbit 12s linear infinite;
+  }
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(0deg) translateX(122px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(122px) rotate(-360deg);
+    }
+  }
+
+  .cube-3d {
+    transform-style: preserve-3d;
+    animation: rotate3d 20s linear infinite;
+  }
+
+  @keyframes rotate3d {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(360deg) rotateY(360deg);
+    }
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Navbar Transitions */
+  nav a {
+    transition: color 0.3s ease-in-out;
+  }
+
+  nav span {
+    transition: color 0.3s ease-in-out;
+  }
+
+  nav button {
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Navbar Button Text - Override dynamic color changes */
+  .navbar-button-text {
+    color: hsl(0, 0%, 100%) !important;
+  }
+}

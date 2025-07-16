@@ -375,11 +375,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Powered by Next-Generation Tech 🚀
+              Powered by Freedom Tech 🚀
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our platform leverages cutting-edge decentralized technologies to
-              create a truly free and open marketplace.
+              Our service leverages permissionless technologies to create truly
+              free and open marketplaces.
             </p>
           </div>
 
@@ -544,7 +544,7 @@ export default function Home() {
             Ready to Experience True Market Freedom? 🎯
           </h2>
           <p className="text-xl text-gray-200 mb-8">
-            Join hundreds of shoppers who are already experiencing the power of
+            Join the shoppers who are already experiencing the power of
             permissionless commerce. Start your journey towards financial
             freedom today.
           </p>

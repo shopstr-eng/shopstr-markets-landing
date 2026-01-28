@@ -4,7 +4,7 @@ import xLogo from "@assets/x-logo.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-card border-t border-border py-16">
+    <footer className="bg-black text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
           <div className="md:col-span-1">
@@ -16,11 +16,11 @@ export default function Footer() {
                   className="w-8 h-8 object-contain"
                 />
               </div>
-              <span className="text-xl font-bold text-foreground">
+              <span className="text-xl font-bold text-white">
                 Shopstr Markets
               </span>
             </div>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-gray-400 mb-4">
               Empowering global commerce through permissionless technology and
               free market principles.
             </p>
@@ -29,12 +29,12 @@ export default function Footer() {
           {/* Mobile: Three columns side by side, Desktop: Continues as before */}
           <div className="grid grid-cols-3 gap-4 md:contents">
             <div className="flex flex-col">
-              <h4 className="font-semibold mb-4 text-foreground">Product</h4>
-              <ul className="space-y-2 text-muted-foreground">
+              <h4 className="font-semibold mb-4 text-white">Product</h4>
+              <ul className="space-y-2 text-gray-400">
                 <li>
                   <a
                     href="/#features"
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Features
                   </a>
@@ -42,7 +42,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/#marketplaces"
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Marketplaces
                   </a>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/#technology"
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Technology
                   </a>
@@ -59,12 +59,12 @@ export default function Footer() {
             </div>
 
             <div className="flex flex-col">
-              <h4 className="font-semibold mb-4 text-foreground">Company</h4>
-              <ul className="space-y-2 text-muted-foreground">
+              <h4 className="font-semibold mb-4 text-white">Company</h4>
+              <ul className="space-y-2 text-gray-400">
                 <li>
                   <a
                     href="/#mission"
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Mission
                   </a>
@@ -76,7 +76,7 @@ export default function Footer() {
                     href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Contact
                   </a>
@@ -85,15 +85,12 @@ export default function Footer() {
             </div>
 
             <div className="flex flex-col">
-              <h4 className="font-semibold mb-4 text-foreground">Support</h4>
-              <ul className="space-y-2 text-muted-foreground">
+              <h4 className="font-semibold mb-4 text-white">Support</h4>
+              <ul className="space-y-2 text-gray-400">
                 {/* <li><a href="/help" className="hover:text-foreground transition-colors">Help Center</a></li> */}
                 {/* <li><a href="/community" className="hover:text-foreground transition-colors">Community</a></li> */}
                 <li>
-                  <a
-                    href="/faq"
-                    className="hover:text-foreground transition-colors"
-                  >
+                  <a href="/faq" className="hover:text-white transition-colors">
                     FAQ
                   </a>
                 </li>
@@ -103,12 +100,12 @@ export default function Footer() {
         </div>
 
         {/* New footer bottom section */}
-        <div className="border-t border-border mt-12 pt-8">
+        <div className="border-t border-white/10 mt-12 pt-8">
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div className="mb-4 flex items-center gap-8 md:mb-0">
               <a
                 href="/terms-of-service"
-                className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-shopstr-purple"
+                className="flex items-center gap-1 text-gray-400 transition-colors hover:text-shopstr-purple"
               >
                 Terms
                 <svg
@@ -127,7 +124,7 @@ export default function Footer() {
               </a>
               <a
                 href="/privacy-policy"
-                className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-shopstr-purple"
+                className="flex items-center gap-1 text-gray-400 transition-colors hover:text-shopstr-purple"
               >
                 Privacy
                 <svg
@@ -149,7 +146,7 @@ export default function Footer() {
                   href="https://github.com/shopstr-eng"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-transform hover:scale-110"
+                  className="transition-transform hover:scale-110 text-gray-400 hover:text-white"
                 >
                   <svg
                     className="w-6 h-6"
@@ -163,7 +160,7 @@ export default function Footer() {
                   href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-transform hover:scale-110"
+                  className="transition-transform hover:scale-110 opacity-70 hover:opacity-100"
                 >
                   <img src={nostrIcon} alt="Nostr Logo" className="w-8 h-8" />
                 </a>
@@ -171,15 +168,13 @@ export default function Footer() {
                   href="https://x.com/_shopstr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-transform hover:scale-110"
+                  className="transition-transform hover:scale-110 opacity-70 hover:opacity-100"
                 >
                   <img src={xLogo} alt="X Logo" className="w-6 h-6" />
                 </a>
               </div>
             </div>
-            <p className="text-muted-foreground">
-              © 2025 Shopstr Markets Inc.
-            </p>
+            <p className="text-gray-400">© 2025 Shopstr Markets Inc.</p>
           </div>
         </div>
       </div>

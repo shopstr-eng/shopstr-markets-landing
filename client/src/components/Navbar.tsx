@@ -40,15 +40,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
 
   // Dynamic text color based on background
   const getNavbarTextColor = () => {
-    if (isScrolled) {
-      return "text-foreground"; // Always dark when scrolled (white background)
-    }
-
-    if (isHomePage) {
-      return "text-white"; // Light text on dark hero background
-    } else {
-      return "text-foreground"; // Dark text on light background for other pages
-    }
+    return "text-foreground";
   };
 
   const navbarBgColor = isScrolled
@@ -74,7 +66,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
       className={`fixed w-full z-50 transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"}`}
     >
       <div
-        className={`w-full transition-all duration-300 ${navbarBgColor} ${mobileBgColor} border-b border-white/10`}
+        className={`w-full transition-all duration-300 ${navbarBgColor} ${mobileBgColor} ${isScrolled ? "border-b" : ""}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -96,28 +88,28 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
 
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden md:flex items-center justify-center flex-1">
-              <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-4">
                 <a
                   href={isHomePage ? "#features" : "/#features"}
-                  className={`transition-colors duration-300 ${navbarTextColor} hover:text-primary`}
+                  className="px-4 py-2 font-bold text-sm bg-white text-black border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Features
                 </a>
                 <a
                   href={isHomePage ? "#marketplaces" : "/#marketplaces"}
-                  className={`transition-colors duration-300 ${navbarTextColor} hover:text-primary`}
+                  className="px-4 py-2 font-bold text-sm bg-white text-black border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Marketplaces
                 </a>
                 <a
                   href={isHomePage ? "#technology" : "/#technology"}
-                  className={`transition-colors duration-300 ${navbarTextColor} hover:text-primary`}
+                  className="px-4 py-2 font-bold text-sm bg-white text-black border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Technology
                 </a>
                 <a
                   href={isHomePage ? "#mission" : "/#mission"}
-                  className={`transition-colors duration-300 ${navbarTextColor} hover:text-primary`}
+                  className="px-4 py-2 font-bold text-sm bg-white text-black border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Mission
                 </a>
@@ -128,7 +120,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
             <div className="hidden md:block">
               <a
                 href={isHomePage ? "#marketplaces" : "/#marketplaces"}
-                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-shopstr-purple to-shopstr-yellow !text-white rounded-md hover:from-shopstr-purple/90 hover:to-shopstr-yellow/90 transition-all font-medium"
+                className="inline-flex items-center px-6 py-2.5 bg-primary text-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all font-bold"
               >
                 Get Started
               </a>
@@ -219,7 +211,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
                   <a
                     href={isHomePage ? "#marketplaces" : "/#marketplaces"}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-shopstr-purple to-shopstr-yellow text-white rounded-md hover:from-shopstr-purple/90 hover:to-shopstr-yellow/90 transition-all font-medium text-lg"
+                    className="inline-flex items-center px-8 py-4 bg-primary text-white rounded-full hover:bg-primary/90 transition-all font-medium text-lg"
                   >
                     Get Started
                   </a>

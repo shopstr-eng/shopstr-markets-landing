@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 91%);
+  --background: hsl(0, 0%, 100%);
   --foreground: hsl(0, 0%, 13%);
   --muted: hsl(0, 0%, 85%);
   --muted-foreground: hsl(0, 0%, 35%);
@@ -13,7 +13,7 @@
   --card-foreground: hsl(0, 0%, 13%);
   --border: hsl(0, 0%, 80%);
   --input: hsl(0, 0%, 80%);
-  --primary: hsl(288, 70%, 49%);
+  --primary: hsl(265, 95%, 65%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(0, 0%, 85%);
   --secondary-foreground: hsl(0, 0%, 13%);
@@ -37,7 +37,7 @@
   --card-foreground: hsl(0, 0%, 91%);
   --border: hsl(0, 0%, 25%);
   --input: hsl(0, 0%, 25%);
-  --primary: hsl(288, 70%, 49%);
+  --primary: hsl(265, 95%, 65%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(0, 0%, 20%);
   --secondary-foreground: hsl(0, 0%, 91%);
@@ -62,11 +62,7 @@
 
 @layer utilities {
   .gradient-bg {
-    background: linear-gradient(
-      135deg,
-      hsl(0, 0%, 13%) 0%,
-      hsl(0, 0%, 16%) 100%
-    );
+    background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
   }
 
   .tech-badge {

@@ -6,13 +6,18 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 channel = "stable-24_05"
 
 [deployment]
-deploymentTarget = "autoscale"
-build = ["npm", "run", "build"]
+deploymentTarget = "static"
+build = ["bash", "-c", "npx vite build && for r in faq privacy-policy terms-of-service; do mkdir -p dist/public/$r && cp dist/public/index.html dist/public/$r/index.html; done"]
 run = ["npm", "run", "start"]
+publicDir = "dist/public"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 8099
+externalPort = 8099
 
 [workflows]
 runButton = "Project"

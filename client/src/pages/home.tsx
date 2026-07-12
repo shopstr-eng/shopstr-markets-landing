@@ -190,7 +190,6 @@ export default function Home() {
                   alt="Shopstr Brand"
                   className="absolute z-20 w-5 h-5 md:w-8 md:h-8 top-[38%] right-[22%] -rotate-[35deg] opacity-80 grayscale brightness-75 contrast-125"
                 />
-
               </div>
             </div>
           </div>
@@ -322,27 +321,28 @@ export default function Home() {
                         Milk Market
                       </h3>
                       <p className="text-gray-400 uppercase text-xs font-bold tracking-wider mt-1">
-                        RAW MILK MARKETPLACE
+                        MARKETPLACE FOR FOOD PRODUCERS & ARTISANS
                       </p>
                     </div>
                   </div>
                   <p className="text-gray-400 mb-8 mt-6 leading-relaxed">
-                    A specialized permissionless marketplace focused on raw milk
-                    and dairy products. Connecting local farmers with
-                    health-conscious consumers.
+                    A permissionless marketplace for farmers, food makers, and
+                    artisan producers. Open a stall in minutes, sell with no
+                    platform fees, and get paid directly - your customers stay
+                    yours.
                   </p>
                   <div className="flex flex-wrap gap-2 mb-8">
-                    <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
-                      Raw Milk
-                    </span>
-                    <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
-                      Fresh Dairy
-                    </span>
                     <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                       Local Farms
                     </span>
                     <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
-                      Health Foods
+                      Food Makers
+                    </span>
+                    <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                      Artisan Goods
+                    </span>
+                    <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                      Zero Platform Fees
                     </span>
                   </div>
                   <Button

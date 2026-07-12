@@ -204,6 +204,8 @@ Changelog:
 - July 15, 2025. Updated Open Graph image to use Shopstr icon (favicon.png) for simpler, cleaner social media previews
 - July 15, 2025. Added favicon using Shopstr icon for better browser tab identification and branding consistency
 - July 15, 2025. Enhanced SEO with additional meta tags including keywords, author, robots, and theme-color for mobile browsers
+- July 12, 2026. Updated Milk Market card to match the live site's new positioning: subtitle now "Marketplace for Food Producers & Artisans", description highlights no platform fees and direct payments, tags changed to Local Farms, Food Makers, Artisan Goods, Zero Platform Fees
+- July 12, 2026. Configured static deployment: builds frontend only (vite build), serves dist/public, copies index.html into faq/, privacy-policy/, and terms-of-service/ so direct links to those routes work; .well-known/nostr.json is included in the build automatically. Dev workflow unchanged.
 ```
 
 ## User Preferences

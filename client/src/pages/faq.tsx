@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card, CardBody } from "@nextui-org/react";
 import { Button } from "@/components/ui/button";
@@ -112,6 +112,29 @@ export default function FAQ() {
     },
   ];
 
+  useEffect(() => {
+    const allQA = faqSections.flatMap((section) =>
+      section.items.map((item) => ({
+        "@type": "Question",
+        name: item.title,
+        acceptedAnswer: { "@type": "Answer", text: item.content },
+      })),
+    );
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: allQA,
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "faq-schema";
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById("faq-schema")?.remove();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-background font-sans bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
       <Navbar isHomePage={false} />
@@ -151,26 +174,34 @@ export default function FAQ() {
                       className={`rounded-xl border-2 border-black transition-all duration-300 ${isOpen ? "bg-purple-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]" : "bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"}`}
                     >
                       <CardBody className="p-0">
-                        <button
-                          onClick={() => toggleItem(id)}
-                          className="w-full flex items-center justify-between p-6 text-left"
-                        >
-                          <span
-                            className={`text-lg font-bold pr-8 ${isOpen ? "text-purple-900" : "text-foreground"}`}
+                        <h3>
+                          <button
+                            onClick={() => toggleItem(id)}
+                            aria-expanded={isOpen}
+                            aria-controls={`faq-panel-${id}`}
+                            id={`faq-trigger-${id}`}
+                            className="w-full flex items-center justify-between p-6 text-left"
                           >
-                            {item.title}
-                          </span>
-                          <div
-                            className={`flex-shrink-0 rounded-lg border-2 border-black p-1 transition-all ${isOpen ? "bg-purple-600 text-white shadow-none" : "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
-                          >
-                            {isOpen ? (
-                              <Minus className="w-4 h-4" />
-                            ) : (
-                              <Plus className="w-4 h-4" />
-                            )}
-                          </div>
-                        </button>
+                            <span
+                              className={`text-lg font-bold pr-8 ${isOpen ? "text-purple-900" : "text-foreground"}`}
+                            >
+                              {item.title}
+                            </span>
+                            <div
+                              className={`flex-shrink-0 rounded-lg border-2 border-black p-1 transition-all ${isOpen ? "bg-purple-600 text-white shadow-none" : "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
+                            >
+                              {isOpen ? (
+                                <Minus className="w-4 h-4" />
+                              ) : (
+                                <Plus className="w-4 h-4" />
+                              )}
+                            </div>
+                          </button>
+                        </h3>
                         <div
+                          id={`faq-panel-${id}`}
+                          role="region"
+                          aria-labelledby={`faq-trigger-${id}`}
                           className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
                         >
                           <div className="overflow-hidden">

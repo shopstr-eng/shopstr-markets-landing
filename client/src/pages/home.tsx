@@ -5,7 +5,7 @@ import shopstrLogo from "@assets/shopstr-icon.png";
 import milkLogo from "@assets/milk-market-icon.png";
 import bitcoinLogo from "@assets/bitcoin-icon.png";
 import nostrOstrich from "@assets/nostr-ostrich.gif";
-import rocketSketch from "@assets/rocket-sketch.png";
+import rocketSketch from "@assets/rocket-sketch.webp";
 import cashuIcon from "@assets/cashu-icon.png";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -183,6 +183,9 @@ export default function Home() {
                   src={rocketSketch}
                   alt="Global Commerce Rocket"
                   className="absolute inset-0 w-full h-full object-contain z-10 drop-shadow-2xl"
+                  width={1200}
+                  height={655}
+                  fetchPriority="high"
                 />
 
                 <img

@@ -1,0 +1,21 @@
+# Shopstr Markets
+
+Shopstr Markets operates permissionless marketplaces built on Bitcoin, Nostr, and Cashu. We enable free, censorship-resistant trade without platform fees or restrictions.
+
+## Key Pages
+
+- Homepage: https://shopstrmarkets.com/
+- FAQ: https://shopstrmarkets.com/faq
+- Privacy Policy: https://shopstrmarkets.com/privacy-policy
+- Terms of Service: https://shopstrmarkets.com/terms-of-service
+
+## Live Marketplaces
+
+- Shopstr (https://shopstr.market) — general permissionless marketplace
+- Milk Market (https://milk.market) — marketplace for food producers and artisans
+
+## Contact & Social
+
+- Nostr: https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e
+- GitHub: https://github.com/shopstr-eng
+- X: https://x.com/_shopstr

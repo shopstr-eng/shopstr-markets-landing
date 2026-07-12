@@ -12,6 +12,9 @@
       content="Shopstr Markets operates permissionless marketplaces including shopstr.market and milk.market. Trade freely without restrictions using Bitcoin and Nostr."
     />
 
+    <!-- Canonical -->
+    <link rel="canonical" href="https://shopstrmarkets.com/" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -34,7 +37,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:url" content="https://shopstr.market/" />
+    <meta name="twitter:url" content="https://shopstrmarkets.com/" />
     <meta
       name="twitter:title"
       content="Shopstr Markets - Permissionless Marketplaces"
@@ -60,6 +63,40 @@
     <meta name="application-name" content="Shopstr Markets" />
     <meta name="msapplication-TileColor" content="#a438ba" />
     <meta name="msapplication-TileImage" content="/favicon.png" />
+
+    <!-- Structured Data: WebSite + Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://shopstrmarkets.com/#website",
+            "url": "https://shopstrmarkets.com/",
+            "name": "Shopstr Markets",
+            "description": "Permissionless marketplaces powered by Bitcoin and Nostr",
+            "publisher": { "@id": "https://shopstrmarkets.com/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://shopstrmarkets.com/#organization",
+            "name": "Shopstr Markets",
+            "url": "https://shopstrmarkets.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://shopstrmarkets.com/favicon.png",
+              "width": 512,
+              "height": 512
+            },
+            "sameAs": [
+              "https://github.com/shopstr-eng",
+              "https://x.com/_shopstr",
+              "https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

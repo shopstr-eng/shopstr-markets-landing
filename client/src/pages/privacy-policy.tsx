@@ -106,26 +106,34 @@ export default function PrivacyPolicy() {
                 className={`rounded-xl border-2 border-black transition-all duration-300 ${isOpen ? "bg-purple-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]" : "bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"}`}
               >
                 <CardBody className="p-0">
-                  <button
-                    onClick={() => toggleItem(index)}
-                    className="w-full flex items-center justify-between p-6 text-left"
-                  >
-                    <span
-                      className={`text-lg font-bold pr-8 ${isOpen ? "text-purple-900" : "text-foreground"}`}
+                  <h2>
+                    <button
+                      onClick={() => toggleItem(index)}
+                      aria-expanded={isOpen}
+                      aria-controls={`privacy-panel-${index}`}
+                      id={`privacy-trigger-${index}`}
+                      className="w-full flex items-center justify-between p-6 text-left"
                     >
-                      {section.title}
-                    </span>
-                    <div
-                      className={`flex-shrink-0 rounded-lg border-2 border-black p-1 transition-all ${isOpen ? "bg-purple-600 text-white shadow-none" : "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
-                    >
-                      {isOpen ? (
-                        <Minus className="w-4 h-4" />
-                      ) : (
-                        <Plus className="w-4 h-4" />
-                      )}
-                    </div>
-                  </button>
+                      <span
+                        className={`text-lg font-bold pr-8 ${isOpen ? "text-purple-900" : "text-foreground"}`}
+                      >
+                        {section.title}
+                      </span>
+                      <div
+                        className={`flex-shrink-0 rounded-lg border-2 border-black p-1 transition-all ${isOpen ? "bg-purple-600 text-white shadow-none" : "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
+                      >
+                        {isOpen ? (
+                          <Minus className="w-4 h-4" />
+                        ) : (
+                          <Plus className="w-4 h-4" />
+                        )}
+                      </div>
+                    </button>
+                  </h2>
                   <div
+                    id={`privacy-panel-${index}`}
+                    role="region"
+                    aria-labelledby={`privacy-trigger-${index}`}
                     className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
                   >
                     <div className="overflow-hidden">

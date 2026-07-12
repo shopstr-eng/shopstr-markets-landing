@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "postgresql-16"]
+modules = ["nodejs-20", "web", "postgresql-16", "python-3.11"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
@@ -7,7 +7,7 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "static"
-build = ["bash", "-c", "npx vite build && for r in faq privacy-policy terms-of-service; do mkdir -p dist/public/$r && cp dist/public/index.html dist/public/$r/index.html; done"]
+build = ["bash", "-c", "npx vite build && node scripts/generate-static-html.mjs"]
 run = ["npm", "run", "start"]
 publicDir = "dist/public"
 
@@ -39,3 +39,7 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000

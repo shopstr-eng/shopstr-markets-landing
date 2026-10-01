@@ -44,7 +44,7 @@ export default function Footer() {
                     href="/#marketplaces"
                     className="hover:text-white transition-colors"
                   >
-                    Marketplaces
+                    Products
                   </a>
                 </li>
                 <li>
@@ -63,6 +63,14 @@ export default function Footer() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <a
+                    href="/about"
+                    className="hover:text-white transition-colors"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="/#mission"
                     className="hover:text-white transition-colors"
                   >
@@ -73,9 +81,7 @@ export default function Footer() {
                 {/* <li><a href="/careers" className="hover:text-foreground transition-colors">Careers</a></li> */}
                 <li>
                   <a
-                    href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/contact"
                     className="hover:text-white transition-colors"
                   >
                     Contact
@@ -123,7 +129,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="/privacy-policy"
+                href="/privacy"
                 className="flex items-center gap-1 text-gray-400 transition-colors hover:text-shopstr-purple"
               >
                 Privacy

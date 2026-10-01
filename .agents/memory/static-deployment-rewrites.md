@@ -1,10 +1,16 @@
 ---
-name: Static deployment SPA rewrites
-description: How SPA route fallbacks were solved for static deployment when .replit rewrites cannot be edited by the agent
+name: Static hosting requirement
+description: Explicit rejection of Autoscale and deployment-specific constraints local tests cannot establish
 ---
 
-The agent cannot edit `.replit` at all (edit tool and bash appends are both blocked), and `deployConfig` silently ignores a `rewrites` parameter. So `[[deployment.rewrites]]` (the proper SPA catch-all `from = "/*"` / `to = "/index.html"`) can only be added manually by the user.
+The user explicitly rejected Autoscale and required static deployment after requesting a lightweight Node server. Keep publishing static unless they explicitly authorize a different deployment type.
 
-**Why:** Static deployments serve files directly; wouter client routes like /faq 404 on direct visits without a fallback.
+**Why:** Interpreting the request for Node functionality as approval to switch hosting was incorrect. Hosting type is a separate product decision.
 
-**How to apply:** The deployment build command works around it by copying `dist/public/index.html` into `faq/`, `privacy-policy/`, and `terms-of-service/` directories after `vite build`. If a new top-level route is added to `client/src/App.tsx`, the copy list in the `.replit` deployment build command must be updated too (ask the user to update it, or reconfigure via deployConfig's build param). Unknown deep links return a server 404 instead of the SPA NotFound page unless the user adds the rewrite manually.
+**How to apply:** Keep HTML and explicit Markdown exports available on static hosting. Do not claim that optional Node code executes there or satisfies same-URL negotiation. Explain incompatible requirements without silently switching hosting. Preserve genuine HTTP 404s rather than adding a catch-all SPA fallback.
+
+Verify published dot-directory resources separately from build output and local static-server tests.
+
+**Why:** A public Nostr verification URL returned 404 even though the build included the file. Replit documentation says static hosting generally does not serve hidden directories. Local Express serving with dotfiles enabled does not reproduce that restriction.
+
+**How to apply:** Check the live endpoint after publishing before claiming Nostr verification works. A hosting rewrite or serving-layer change may be required; direct .replit rewrites were previously blocked and deployConfig did not expose them. Consult current tools/docs rather than assuming that restriction is permanent.

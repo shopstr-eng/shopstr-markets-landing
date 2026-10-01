@@ -1,3 +1,1 @@
-# Memory Index
-
-- [Static deployment SPA rewrites](static-deployment-rewrites.md) — agent can't edit .replit rewrites; build command copies index.html per route, keep copy list in sync with new routes.
+- [Static hosting requirement](static-deployment-rewrites.md) — user explicitly rejected Autoscale; a request for server functionality does not authorize changing deployment type.

@@ -1,18 +1,26 @@
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import {
+  escapeHtml,
+  renderTrustPage,
+  pageToMarkdown,
+} from "./static-content.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, "../dist/public");
 
 const BASE_URL = "https://shopstrmarkets.com";
+const trustPages = JSON.parse(
+  readFileSync(join(__dirname, "../shared/trust-pages.json"), "utf-8"),
+);
 
 const NAV_HTML = `
 <nav style="position:fixed;top:0;left:0;right:0;z-index:50;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;">
   <a href="/" style="font-weight:900;font-size:1.25rem;">Shopstr Markets</a>
   <div style="display:flex;gap:2rem;align-items:center;">
     <a href="/#features">Features</a>
-    <a href="/#marketplaces">Marketplaces</a>
+    <a href="/#marketplaces">Products</a>
     <a href="/#technology">Technology</a>
     <a href="/#mission">Mission</a>
     <a href="/faq">FAQ</a>
@@ -32,7 +40,7 @@ const FOOTER_HTML = `
         <h4 style="font-weight:700;margin-bottom:0.75rem;">Product</h4>
         <ul style="list-style:none;padding:0;color:#9ca3af;line-height:2;">
           <li><a href="/#features" style="color:#9ca3af;">Features</a></li>
-          <li><a href="/#marketplaces" style="color:#9ca3af;">Marketplaces</a></li>
+          <li><a href="/#marketplaces" style="color:#9ca3af;">Products</a></li>
           <li><a href="/#technology" style="color:#9ca3af;">Technology</a></li>
         </ul>
       </div>
@@ -40,20 +48,21 @@ const FOOTER_HTML = `
         <h4 style="font-weight:700;margin-bottom:0.75rem;">Company</h4>
         <ul style="list-style:none;padding:0;color:#9ca3af;line-height:2;">
           <li><a href="/#mission" style="color:#9ca3af;">Mission</a></li>
+          <li><a href="/about" style="color:#9ca3af;">About</a></li>
         </ul>
       </div>
       <div>
         <h4 style="font-weight:700;margin-bottom:0.75rem;">Support</h4>
         <ul style="list-style:none;padding:0;color:#9ca3af;line-height:2;">
           <li><a href="/faq" style="color:#9ca3af;">FAQ</a></li>
-          <li><a href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e" style="color:#9ca3af;">Contact</a></li>
+          <li><a href="/contact" style="color:#9ca3af;">Contact</a></li>
         </ul>
       </div>
     </div>
     <div style="border-top:1px solid #333;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
       <div style="display:flex;gap:1.5rem;">
         <a href="/terms-of-service" style="color:#9ca3af;font-size:0.875rem;">Terms of Service</a>
-        <a href="/privacy-policy" style="color:#9ca3af;font-size:0.875rem;">Privacy Policy</a>
+        <a href="/privacy" style="color:#9ca3af;font-size:0.875rem;">Privacy Policy</a>
       </div>
       <p style="color:#6b7280;font-size:0.875rem;">&copy; 2025 Shopstr Markets Inc.</p>
     </div>
@@ -109,8 +118,8 @@ const PAGE_CONTENT = {
 
     <section id="marketplaces" style="padding:4rem 2rem;background:#fff;">
       <div style="max-width:1280px;margin:0 auto;">
-        <h2 style="font-size:2.25rem;font-weight:900;text-align:center;margin-bottom:1rem;">Our Live Marketplaces</h2>
-        <p style="text-align:center;color:#6b7280;margin-bottom:3rem;font-size:1.1rem;">Experience the future of commerce today.</p>
+        <h2 style="font-size:2.25rem;font-weight:900;text-align:center;margin-bottom:1rem;">Our Products</h2>
+        <p style="text-align:center;color:#6b7280;margin-bottom:3rem;font-size:1.1rem;">Explore our marketplaces and products, from permissionless commerce to locally sourced goods.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:3rem;">
           <div style="background:#f5f5f5;border:2px solid #111;border-radius:0.75rem;padding:2rem;">
             <h3 style="font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;">Shopstr</h3>
@@ -125,7 +134,7 @@ const PAGE_CONTENT = {
             <a href="https://shopstr.market" style="background:#a438ba;color:#fff;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:700;display:inline-block;">Visit shopstr.market ✨</a>
           </div>
           <div style="background:#111;border:2px solid #111;border-radius:0.75rem;padding:2rem;color:#fff;">
-            <h3 style="font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;color:#fff;">Milk Market</h3>
+            <h3 style="font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;color:#fff;display:flex;align-items:center;gap:1rem;"><img src="/self-sown-icon.png" alt="Self-sown Icon" width="48" height="48" style="object-fit:contain;background:#f3f4f6;border-radius:0.5rem;padding:6px;"/>Self-sown</h3>
             <p style="color:#9ca3af;font-size:0.75rem;text-transform:uppercase;font-weight:700;letter-spacing:0.1em;margin-bottom:1.5rem;">MARKETPLACE FOR FOOD PRODUCERS &amp; ARTISANS</p>
             <p style="color:#9ca3af;margin-bottom:2rem;line-height:1.7;">A permissionless marketplace for farmers, food makers, and artisan producers. Open a stall in minutes, sell with no platform fees, and get paid directly — your customers stay yours.</p>
             <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;">
@@ -134,7 +143,16 @@ const PAGE_CONTENT = {
               <span style="background:#1f2937;color:#e5e7eb;padding:0.375rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:700;">Artisan Goods</span>
               <span style="background:#1f2937;color:#e5e7eb;padding:0.375rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:700;">Zero Platform Fees</span>
             </div>
-            <a href="https://milk.market" style="background:#facc15;color:#111;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:700;display:inline-block;">Visit milk.market 🥛</a>
+            <a href="https://self-sown.com" style="background:#facc15;color:#111;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:700;display:inline-flex;align-items:center;gap:0.5rem;">Visit self-sown.com <img src="/self-sown-icon.png" alt="" aria-hidden="true" width="24" height="24" style="object-fit:contain;"/></a>
+          </div>
+          <div style="background:#fff;border:2px solid #111;border-radius:0.75rem;padding:2rem;box-shadow:8px 8px 0 #000;">
+            <h3 style="font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;display:flex;align-items:center;gap:1rem;"><img src="/naughty-goat-icon.webp" alt="Naughty Goat Co. Logo" width="48" height="48" style="object-fit:contain;background:#f3f4f6;border-radius:0.5rem;padding:6px;"/>Naughty Goat Co.</h3>
+            <p style="color:#6b7280;font-size:0.75rem;text-transform:uppercase;font-weight:700;letter-spacing:0.1em;margin-bottom:1.5rem;">REGENERATIVE MEXICAN CAJETA</p>
+            <p style="color:#4b5563;margin-bottom:2rem;line-height:1.7;">Locally sourced Mexican goat-milk caramel supporting regenerative farms. Discover Honey Cajeta — all of the attitude, none of the additives.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;">
+              ${["Honey Cajeta", "Goat Milk Caramel", "Regenerative Farms", "Locally Sourced"].map((tag) => `<span style="background:#ede9fe;color:#581c87;padding:0.375rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:700;">${tag}</span>`).join("")}
+            </div>
+            <a href="https://naughtygoat.co" target="_blank" rel="noopener noreferrer" style="background:#a438ba;color:#fff;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:700;display:inline-block;">Visit naughtygoat.co</a>
           </div>
         </div>
       </div>
@@ -397,16 +415,25 @@ const PAGE_CONTENT = {
 </div>`.trim(),
 };
 
+for (const [slug, page] of Object.entries(trustPages)) {
+  PAGE_CONTENT[`/${slug}`] = renderTrustPage(page, {
+    nav: NAV_HTML,
+    footer: FOOTER_HTML,
+    contact: slug === "contact",
+  });
+}
+PAGE_CONTENT["/privacy"] = PAGE_CONTENT["/privacy-policy"];
+
 const routes = [
   {
     path: "/",
     outDir: "",
     title: "Shopstr Markets - Commerce Without Boundaries",
     description:
-      "Shopstr Markets operates permissionless marketplaces including shopstr.market and milk.market. Trade freely without restrictions using Bitcoin and Nostr.",
-    ogTitle: "Shopstr Markets - Permissionless Marketplaces",
+      "Explore Shopstr Markets products: Shopstr for permissionless commerce, Self-sown for food producers and artisans, and Naughty Goat Co. for regenerative Mexican cajeta.",
+    ogTitle: "Shopstr Markets - Our Products",
     ogDescription:
-      "Trade freely without restrictions on our permissionless marketplaces powered by Bitcoin and Nostr.",
+      "Discover Shopstr, Self-sown, and Naughty Goat Co. — permissionless marketplaces and locally sourced goods.",
   },
   {
     path: "/faq",
@@ -438,21 +465,68 @@ const routes = [
     ogDescription:
       "Read the terms of service for Shopstr Markets and our permissionless marketplace platforms built on Bitcoin and Nostr.",
   },
+  ...Object.entries(trustPages).map(([slug, page]) => ({
+    path: `/${slug}`,
+    outDir: slug,
+    title: page.title,
+    description: page.description,
+    ogTitle: page.title,
+    ogDescription: page.description,
+  })),
+  {
+    path: "/privacy",
+    canonicalPath: "/privacy-policy",
+    outDir: "privacy",
+    title: "Privacy Policy | Shopstr Markets",
+    description:
+      "Shopstr Markets privacy policy. We minimize data collection and protect your privacy as a permissionless marketplace service.",
+    ogTitle: "Privacy Policy | Shopstr Markets",
+    ogDescription:
+      "Learn how Shopstr Markets protects your privacy through minimal data collection in our permissionless marketplace service.",
+  },
 ];
 
 const baseHtml = readFileSync(join(distDir, "index.html"), "utf-8");
 
 for (const route of routes) {
-  const canonicalUrl = `${BASE_URL}${route.path === "/" ? "/" : route.path}`;
+  const canonicalUrl = `${BASE_URL}${route.canonicalPath ?? route.path}`;
   const bodyContent = PAGE_CONTENT[route.path];
+  if (!bodyContent) throw new Error(`Missing content for ${route.path}`);
 
   let html = baseHtml;
+  const markdownPath = `${route.path === "/" ? "" : route.path}/index.md`;
+  html = html.replace(
+    /<link rel="alternate" type="text\/markdown" href="[^"]*" \/>/,
+    `<link rel="alternate" type="text/markdown" href="${markdownPath}" />`,
+  );
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@type":
+      route.path === "/about"
+        ? "AboutPage"
+        : route.path === "/contact"
+          ? "ContactPage"
+          : "WebPage",
+    "@id": `${canonicalUrl}#webpage`,
+    url: canonicalUrl,
+    name: route.title,
+    description: route.description,
+    isPartOf: { "@id": `${BASE_URL}/#website` },
+    about: { "@id": `${BASE_URL}/#organization` },
+  };
+  html = html.replace(
+    "</head>",
+    `<script type="application/ld+json">${JSON.stringify(pageSchema).replace(/</g, "\\u003c")}</script>\n</head>`,
+  );
 
-  html = html.replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`);
+  html = html.replace(
+    /<title>[^<]*<\/title>/,
+    `<title>${escapeHtml(route.title)}</title>`,
+  );
 
   html = html.replace(
     /<meta\s+name="description"\s+content="[^"]*"\s*\/>/,
-    `<meta name="description" content="${route.description}" />`,
+    `<meta name="description" content="${escapeHtml(route.description)}" />`,
   );
 
   if (html.includes('<link rel="canonical"')) {
@@ -474,12 +548,12 @@ for (const route of routes) {
 
   html = html.replace(
     /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/,
-    `<meta property="og:title" content="${route.ogTitle}" />`,
+    `<meta property="og:title" content="${escapeHtml(route.ogTitle)}" />`,
   );
 
   html = html.replace(
     /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/,
-    `<meta property="og:description" content="${route.ogDescription}" />`,
+    `<meta property="og:description" content="${escapeHtml(route.ogDescription)}" />`,
   );
 
   html = html.replace(
@@ -489,12 +563,12 @@ for (const route of routes) {
 
   html = html.replace(
     /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/>/,
-    `<meta name="twitter:title" content="${route.ogTitle}" />`,
+    `<meta name="twitter:title" content="${escapeHtml(route.ogTitle)}" />`,
   );
 
   html = html.replace(
     /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/,
-    `<meta name="twitter:description" content="${route.ogDescription}" />`,
+    `<meta name="twitter:description" content="${escapeHtml(route.ogDescription)}" />`,
   );
 
   html = html.replace(
@@ -512,6 +586,11 @@ for (const route of routes) {
   }
 
   writeFileSync(outPath, html, "utf-8");
+  writeFileSync(
+    join(dirname(outPath), "index.md"),
+    pageToMarkdown(bodyContent, canonicalUrl),
+    "utf-8",
+  );
   console.log(`Generated: ${outPath}`);
 }
 

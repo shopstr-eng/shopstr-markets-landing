@@ -1,0 +1,56 @@
+{
+  "about": {
+    "title": "About Shopstr Markets",
+    "description": "Permissionless commerce built on Nostr and Bitcoin, with marketplaces and products for different communities.",
+    "sections": [
+      {
+        "title": "Commerce without gatekeepers",
+        "paragraphs": [
+          "Shopstr Markets is a permissionless marketplace service building on Nostr to enable peer-to-peer commerce using Bitcoin. Its mission is to reduce barriers to trade, connect buyers and sellers directly, and support privacy and financial sovereignty. The services described on this site use open protocols rather than a single centralized marketplace account system.",
+          "Nostr provides the communication layer and a portable identity based on your keys. Bitcoin payments are supported through the Lightning Network and Cashu ecash. These technologies are the foundation of the marketplaces introduced here; the FAQ explains how accounts, payments, listings, and encrypted messages work in practice."
+        ]
+      },
+      {
+        "title": "Our marketplaces and products",
+        "paragraphs": [
+          "Shopstr is the general-purpose permissionless marketplace featured on this site. It supports a broad range of goods, including electronics, art and collectibles, books, and clothing. Self-sown is a marketplace for farmers, food makers, and artisan producers, with direct payments and no platform fees.",
+          "Naughty Goat Co. is a food brand and storefront, not a general-purpose marketplace. The product featured here is Honey Cajeta, a Mexican goat-milk caramel made with locally sourced ingredients and supporting regenerative farms. The home page links to Shopstr, Self-sown, and Naughty Goat Co. so you can explore each product in its own setting."
+        ]
+      },
+      {
+        "title": "Understanding your role",
+        "paragraphs": [
+          "Marketplace sellers create listings with descriptions, images, categories, and shipping requirements. Merchants handle fulfillment themselves and specify the shipping options available for each listing. Buyers can contact sellers through the marketplace messaging system, including to discuss an order, request a refund, or initiate a return.",
+          "Users remain responsible for protecting their private keys and wallets and for choosing the Nostr relays they use. Public listings and messages published to relays may remain there according to each relay's retention policy. Read the FAQ and Privacy Policy for more detail, and use the official Nostr and GitHub links to find the project's community and open-source work."
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact Shopstr Markets",
+    "description": "Find public contact details, marketplace guidance, and official community channels.",
+    "sections": [
+      {
+        "title": "Get in touch",
+        "paragraphs": [
+          "For business inquiries and questions about Shopstr Markets, email biz@shopstrmarkets.com or call +1 (206) 290-9736. The email and phone links on this page open your email application or phone dialer. You can also find Shopstr Markets through the official Nostr profile and GitHub organization linked below.",
+          "When contacting us, identify the product you are asking about: Shopstr, the general marketplace; Self-sown, the marketplace for farmers, food makers, and artisan producers; or Naughty Goat Co., the food brand and storefront. Include a clear description of your question and any relevant public page or listing link so the context is easy to understand."
+        ]
+      },
+      {
+        "title": "Questions about an order",
+        "paragraphs": [
+          "For a purchase, shipping question, refund request, or return, contact the seller directly through the marketplace's messaging system. The FAQ explains that you can open a merchant's profile from a listing to send a message. Sellers specify their shipping options and restrictions in their listings and handle fulfillment themselves.",
+          "The FAQ also covers Lightning and Cashu payments, signing in with Nostr, and viewing encrypted order messages. Reviewing those answers can help you describe a technical issue more precisely. Do not send private keys, wallet recovery phrases, or Cashu tokens in an email, a public GitHub issue, or a public Nostr post."
+        ]
+      },
+      {
+        "title": "Privacy and open-source questions",
+        "paragraphs": [
+          "For questions about data handling, start with the Privacy Policy. It describes Nostr relay data, Bitcoin and Lightning transactions, local browser storage, and the choices users control. You can use the public contact details above or the official Nostr channel for a privacy-related inquiry without sharing sensitive account credentials.",
+          "The official GitHub organization provides a route to the project's open-source work, while Nostr provides a community contact channel. These are external services with their own practices. Keep public reports focused on non-sensitive information, and use the FAQ and Privacy Policy alongside those channels when deciding what information to share."
+        ]
+      }
+    ]
+  }
+}

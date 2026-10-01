@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import { Button } from "@/components/ui/button";
 import shopstrLogo from "@assets/shopstr-icon.png";
-import milkLogo from "@assets/milk-market-icon.png";
 import bitcoinLogo from "@assets/bitcoin-icon.png";
 import nostrOstrich from "@assets/nostr-ostrich.gif";
 import rocketSketch from "@assets/rocket-sketch.webp";
@@ -239,23 +238,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Marketplaces Section */}
+      {/* Products Section — retain the anchor for existing links. */}
       <section id="marketplaces" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-1.5 rounded-md border-2 border-black bg-purple-100 text-purple-700 font-bold text-sm mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              🛍️ Our Platforms
+              🛍️ Explore Our Products
             </div>
             <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4">
-              Our Live Marketplaces
+              Our Products
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Experience the future of commerce today. Our active marketplaces
-              are already connecting buyers and sellers worldwide.
+              Explore our marketplaces and products, from permissionless
+              commerce to locally sourced goods.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-3 gap-8">
             <Card className="rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-white hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
               <CardBody className="p-8 text-black relative overflow-hidden">
                 <div className="relative z-10">
@@ -314,14 +313,14 @@ export default function Home() {
                   <div className="flex items-center space-x-4 mb-4">
                     <div className="w-12 h-12 bg-gray-100 rounded-lg border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                       <img
-                        src={milkLogo}
-                        alt="Milk Market Icon"
+                        src="/self-sown-icon.png"
+                        alt="Self-sown Icon"
                         className="w-8 h-8 object-contain"
                       />
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold text-white">
-                        Milk Market
+                        Self-sown
                       </h3>
                       <p className="text-gray-400 uppercase text-xs font-bold tracking-wider mt-1">
                         MARKETPLACE FOR FOOD PRODUCERS & ARTISANS
@@ -351,9 +350,73 @@ export default function Home() {
                   <Button
                     size="lg"
                     className="text-black bg-yellow-400 hover:bg-yellow-500 min-w-fit transition-all duration-300 font-bold px-6 py-6 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-                    onClick={() => window.open("https://milk.market", "_blank")}
+                    onClick={() =>
+                      window.open("https://self-sown.com", "_blank")
+                    }
                   >
-                    Visit milk.market 🥛
+                    Visit self-sown.com
+                    <img
+                      src="/self-sown-icon.png"
+                      alt=""
+                      aria-hidden="true"
+                      className="ml-2 w-6 h-6 object-contain"
+                    />
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+            <Card className="rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-white hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+              <CardBody className="p-8 text-black relative overflow-hidden">
+                <div className="relative z-10">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-12 h-12 shrink-0 bg-gray-100 rounded-lg border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                      <img
+                        src="/naughty-goat-icon.webp"
+                        alt="Naughty Goat Co. Logo"
+                        className="w-8 h-8 object-contain"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground">
+                        Naughty Goat Co.
+                      </h3>
+                      <p className="text-gray-500 uppercase text-xs font-bold tracking-wider mt-1">
+                        REGENERATIVE MEXICAN CAJETA
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 mb-8 mt-6 leading-relaxed">
+                    Locally sourced Mexican goat-milk caramel supporting
+                    regenerative farms. Discover Honey Cajeta — all of the
+                    attitude, none of the additives.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {[
+                      "Honey Cajeta",
+                      "Goat Milk Caramel",
+                      "Regenerative Farms",
+                      "Locally Sourced",
+                    ].map((tag) => (
+                      <span
+                        key={tag}
+                        className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <Button
+                    size="lg"
+                    asChild
+                    className="bg-primary text-white w-fit rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-6 py-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                  >
+                    <a
+                      href="https://naughtygoat.co"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit naughtygoat.co
+                    </a>
                   </Button>
                 </div>
               </CardBody>
@@ -363,9 +426,6 @@ export default function Home() {
           <div className="mt-16">
             <Card className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-400 w-full">
               <CardBody className="p-12 text-center">
-                <h4 className="text-xl font-bold mb-4 text-foreground">
-                  More Marketplaces Coming Soon
-                </h4>
                 <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                   We're planning on expanding our network of specialized
                   marketplaces to serve every community and niche.

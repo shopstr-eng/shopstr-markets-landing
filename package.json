@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
+    "build": "npm run build:static",
+    "build:static": "vite build && node scripts/generate-static-html.mjs",
+    "test": "npm run build:static && node --test tests/*.test.mjs",
+    "start": "NODE_ENV=production node server/serve-export.mjs",
     "check": "tsc",
     "db:push": "drizzle-kit push"
   },

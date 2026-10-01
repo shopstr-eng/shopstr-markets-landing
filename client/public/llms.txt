@@ -1,21 +1,33 @@
 # Shopstr Markets
 
-Shopstr Markets operates permissionless marketplaces built on Bitcoin, Nostr, and Cashu. We enable free, censorship-resistant trade without platform fees or restrictions.
+> Shopstr Markets showcases Shopstr, Self-sown, and Naughty Goat Co. Its permissionless marketplaces use Nostr, Bitcoin, Lightning, and Cashu for peer-to-peer commerce.
 
-## Key Pages
+**When to use this site:** Use this site to compare our products, find the right marketplace for a buyer or producer, explain the basics of Nostr commerce and Bitcoin payments, or locate official company, contact, and policy information.
 
-- Homepage: https://shopstrmarkets.com/
-- FAQ: https://shopstrmarkets.com/faq
-- Privacy Policy: https://shopstrmarkets.com/privacy-policy
-- Terms of Service: https://shopstrmarkets.com/terms-of-service
+**How to use it:** Fetch this file with an ordinary HTTP GET, then follow the Markdown links below for the relevant topic. No login or API key is needed to read these public pages. This is an informational site, not a shopping API or MCP server. To browse listings or start a transaction, follow the relevant product's website and its published interface; do not invent API endpoints. A purchase, payment, or message must be authorized by the user.
 
-## Live Marketplaces
+**Static hosting:** HTML pages do not negotiate Markdown using Accept: text/markdown. Use the explicit index.md links below instead. Missing URLs return the hosting provider's HTTP 404 response; this site does not offer negotiated Markdown 404s. The Markdown files are reading alternatives, not same-URL content-negotiation support.
 
-- Shopstr (https://shopstr.market) — general permissionless marketplace
-- Milk Market (https://milk.market) — marketplace for food producers and artisans
+**Scope and accuracy:** Shopstr is a general marketplace. Self-sown serves food producers and artisans. Naughty Goat Co. is a food brand and storefront selling Mexican goat-milk caramel, not a general marketplace. For current inventory, prices, fulfillment, or refunds, consult the relevant storefront or seller rather than inferring them from this landing page. Never request private keys, wallet recovery phrases, or Cashu tokens.
 
-## Contact & Social
+## When to use this site
 
-- Nostr: https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e
-- GitHub: https://github.com/shopstr-eng
-- X: https://x.com/_shopstr
+- [Homepage and product overview](https://shopstrmarkets.com/index.md): Product selection and the technologies behind the marketplaces.
+- [About Shopstr Markets](https://shopstrmarkets.com/about/index.md): Purpose, product roles, and buyer and seller responsibilities.
+- [Contact Shopstr Markets](https://shopstrmarkets.com/contact/index.md): Business email biz@shopstrmarkets.com, telephone +1 (206) 290-9736, and official channels. No postal address is published.
+- [FAQ](https://shopstrmarkets.com/faq/index.md): Read before explaining Nostr accounts, listings, payments, messages, shipping, or returns.
+- [Privacy Policy](https://shopstrmarkets.com/privacy-policy/index.md): Data handling and user choices; the human-readable /privacy page is an alias of /privacy-policy.
+- [Terms of Service](https://shopstrmarkets.com/terms-of-service/index.md): Responsibilities and conditions for using the marketplaces.
+
+## Our Products
+
+- [Shopstr](https://shopstr.market): General permissionless marketplace for goods such as electronics, art, books, and clothing.
+- [Self-sown](https://self-sown.com): Marketplace for farmers, food makers, and artisans, with direct payments and no platform fees.
+- [Naughty Goat Co.](https://naughtygoat.co): Locally sourced, regenerative Mexican goat-milk caramel, including Honey Cajeta.
+
+## Optional
+
+- [Sitemap](https://shopstrmarkets.com/sitemap.xml): Canonical human-readable pages.
+- [Official Nostr profile](https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e): Community contact.
+- [GitHub](https://github.com/shopstr-eng): Open-source organization.
+- [X](https://x.com/_shopstr): Public social account.

@@ -99,7 +99,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
                   href={isHomePage ? "#marketplaces" : "/#marketplaces"}
                   className="px-4 py-2 font-bold text-sm bg-white text-black border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
-                  Marketplaces
+                  Products
                 </a>
                 <a
                   href={isHomePage ? "#technology" : "/#technology"}
@@ -191,7 +191,7 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
                   className="text-2xl font-medium text-gray-700 hover:text-shopstr-purple transition-colors py-4"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Marketplaces
+                  Products
                 </a>
                 <a
                   href={isHomePage ? "#technology" : "/#technology"}

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a modern landing page for Shopstr Markets, a permissionless marketplace business built with React and Express.js. The application features a modern tech stack with TypeScript, Tailwind CSS, and shadcn/ui components, showcasing the company's live marketplaces (shopstr.market and milk.market) and their decentralized technology stack.
+This is a modern landing page for Shopstr Markets, a permissionless marketplace business built with React and Express.js. The application features a modern tech stack with TypeScript, Tailwind CSS, and shadcn/ui components, showcasing the company's live marketplaces (shopstr.market and self-sown.com) and their decentralized technology stack.
 
 ## System Architecture
 
@@ -84,7 +84,7 @@ This is a modern landing page for Shopstr Markets, a permissionless marketplace 
 
 - **Build**: Vite for fast development and optimized builds
 - **TypeScript**: Full type safety across the application
-- **ESBuild**: Backend bundling for production deployment
+- **Production hosting**: Static deployment of the prebuilt export; the optional Node server is not used for publishing
 - **Replit Integration**: Custom plugins for Replit environment
 
 ## Deployment Strategy
@@ -98,16 +98,17 @@ This is a modern landing page for Shopstr Markets, a permissionless marketplace 
 ### Production
 
 - **Frontend**: Static files built with Vite
-- **Backend**: Bundled with ESBuild for Node.js execution
-- **Database**: PostgreSQL connection via environment variables
-- **Static Serving**: Express serves built frontend files
+- **Hosting**: Static deployment, as explicitly requested by the user. Publish `dist/public` after `npm run build:static`
+- **Serving**: HTML and explicit `index.md` files are generated at build time. No runtime Accept negotiation or Markdown 404s on static hosting
+- **Optional server**: `npm start` can run the Node export server locally, but it is not part of the configured static deployment
+- **Nostr**: The verification JSON is retained in the export; public access depends on static-host handling of hidden directories and must be checked separately
 
 ### Build Process
 
 1. Frontend assets compiled with Vite
-2. Backend bundled with ESBuild
-3. Database migrations applied with Drizzle Kit
-4. Single Node.js process serves both frontend and API
+2. `scripts/generate-static-html.mjs` exports each route as HTML and Markdown
+3. Publish `dist/public` as static files; no server process or database migrations are required
+4. `npm test` rebuilds and tests the export and optional Node server; Node-server checks do not establish static-host behavior
 
 ## Changelog
 
@@ -115,7 +116,7 @@ This is a modern landing page for Shopstr Markets, a permissionless marketplace 
 Changelog:
 - July 05, 2025. Initial setup
 - July 05, 2025. Updated branding to "Shopstr Markets" with custom color scheme (shopstr yellow #fcd34d and shopstr purple #a438ba)
-- July 05, 2025. Added new Marketplaces section showcasing shopstr.market and milk.market
+- July 05, 2025. Added new Marketplaces section showcasing shopstr.market and self-sown.com
 - July 05, 2025. Updated copyright notice to "Shopstr Markets Inc."
 - July 05, 2025. Added SEO meta tags and Open Graph properties
 - July 06, 2025. Replaced globe emojis with Shopstr logo throughout the site
@@ -186,13 +187,13 @@ Changelog:
 - July 13, 2025. Made "Shopstr Markets" text in navbar clickable, routing to homepage in both desktop and mobile views
 - July 13, 2025. Centered the "Making Markets Free" section on large screens with improved layout and readability
 - July 13, 2025. Fixed text alignment in mission section to be properly centered on all screen sizes while maintaining readability for bullet points and quote
-- July 13, 2025. Fixed yellow background in milk.market card to properly fill the entire card on large screens by moving gradient from nested div to Card component
-- July 13, 2025. Updated milk.market card to use white background with black text, black title, and black button for clean minimalist aesthetic
+- July 13, 2025. Fixed yellow background in self-sown.com card to properly fill the entire card on large screens by moving gradient from nested div to Card component
+- July 13, 2025. Updated self-sown.com card to use white background with black text, black title, and black button for clean minimalist aesthetic
 - July 13, 2025. Updated shopstr.market card to use gradient-bg background (same as hero section), yellow title and button, white text for consistency
-- July 13, 2025. Changed marketplace card titles: "shopstr.market" to "Shopstr" and "milk.market" to "Milk Market" for cleaner presentation
+- July 13, 2025. Changed marketplace card titles: "shopstr.market" to "Shopstr" and "self-sown.com" to "Self-sown" for cleaner presentation
 - July 13, 2025. Updated Shopstr card to use light gray background (#f5f5f5) with purple title and button, black text for improved contrast
 - July 13, 2025. Replaced shopping cart emoji with Shopstr logo (shopstr-2000x2000.png) in Shopstr marketplace card
-- July 13, 2025. Replaced milk glass emoji with milk market icon (milk-market_1752448686068.png) in Milk Market card
+- July 13, 2025. Replaced milk glass emoji with Self-sown icon (milk-market_1752448686068.png) in Self-sown card
 - July 13, 2025. Fixed accordion functionality on FAQ, Terms of Service, and Privacy Policy pages by adding selectionMode="multiple" and unique keys
 - July 14, 2025. Updated Footer Contact link to route to njump Nostr profile (same as Nostr icon) for consistent contact method
 - July 14, 2025. Removed accordion components from FAQ, Terms of Service, and Privacy Policy pages - content now displays directly without collapsible sections
@@ -204,7 +205,7 @@ Changelog:
 - July 15, 2025. Updated Open Graph image to use Shopstr icon (favicon.png) for simpler, cleaner social media previews
 - July 15, 2025. Added favicon using Shopstr icon for better browser tab identification and branding consistency
 - July 15, 2025. Enhanced SEO with additional meta tags including keywords, author, robots, and theme-color for mobile browsers
-- July 12, 2026. Updated Milk Market card to match the live site's new positioning: subtitle now "Marketplace for Food Producers & Artisans", description highlights no platform fees and direct payments, tags changed to Local Farms, Food Makers, Artisan Goods, Zero Platform Fees
+- July 12, 2026. Updated Self-sown card to match the live site's new positioning: subtitle now "Marketplace for Food Producers & Artisans", description highlights no platform fees and direct payments, tags changed to Local Farms, Food Makers, Artisan Goods, Zero Platform Fees
 - July 12, 2026. Configured static deployment: builds frontend only (vite build), serves dist/public, copies index.html into faq/, privacy-policy/, and terms-of-service/ so direct links to those routes work; .well-known/nostr.json is included in the build automatically. Dev workflow unchanged.
 ```
 

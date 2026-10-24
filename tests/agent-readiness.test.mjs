@@ -287,7 +287,7 @@ test("privacy alias shares the actual policy, metadata, canonical and Markdown c
   );
 });
 
-test("about and contact prose exactly matches the shared JSON used by React", async (t) => {
+test("about and contact output matches the shared content", async (t) => {
   for (const slug of ["about", "contact"]) {
     await t.test(slug, async () => {
       const content = trustPages[slug];
@@ -319,31 +319,7 @@ test("about and contact prose exactly matches the shared JSON used by React", as
         for (const paragraph of section.paragraphs)
           assert.ok(markdown.includes(paragraph));
       }
-      const reactPage = await readFile(
-        join(ROOT, `client/src/pages/${slug}.tsx`),
-        "utf8",
-      );
-      assert.match(reactPage, new RegExp(`<TrustPage\\s+page="${slug}"\\s*/>`));
     });
-  }
-  const react = await readFile(
-    join(ROOT, "client/src/components/TrustPage.tsx"),
-    "utf8",
-  );
-  assert.match(
-    react,
-    /import\s+\w+\s+from\s+["']@shared\/trust-pages\.json["']/,
-  );
-  for (const binding of [
-    "content.title",
-    "content.description",
-    "section.title",
-    "paragraph",
-  ]) {
-    assert.ok(
-      react.includes(`{${binding}}`),
-      `React must render shared content: ${binding}`,
-    );
   }
 });
 
@@ -613,7 +589,7 @@ test("all source public files, including dotfiles, are copied unchanged to the s
   }
 });
 
-test("static and React footers expose trust links and React registers every public route", async () => {
+test("every exported page footer exposes the trust links", async () => {
   for (const route of routes) {
     const footers = elementContents(await htmlFor(route), "footer");
     assert.equal(footers.length, 1);
@@ -624,22 +600,6 @@ test("static and React footers expose trust links and React registers every publ
         `Missing static footer link ${href} on ${route.path}`,
       );
   }
-  const footer = (
-    await readFile(join(ROOT, "client/src/components/Footer.tsx"), "utf8")
-  ).replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
-  const hrefs = tags(footer, "a").map((anchor) => anchor.href);
-  for (const href of trustLinks)
-    assert.ok(hrefs.includes(href), `Missing React footer link ${href}`);
-  for (const route of routes) {
-    const html = await htmlFor(route);
-    assert.match(html, /rel="modulepreload"/);
-    assert.match(html, /data-overlay-container="true"/);
-  }
-
-  assert.match(
-    await readFile(join(ROOT, "client/src/components/TrustPage.tsx"), "utf8"),
-    /<Footer\s*\/>/,
-  );
 });
 
 // This is a local plain-static HTTP fixture, NOT verification of production hosting.

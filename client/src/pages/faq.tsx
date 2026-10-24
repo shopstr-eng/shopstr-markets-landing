@@ -1,24 +1,11 @@
-import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { Card, CardBody } from "@nextui-org/react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Plus, Minus, HelpCircle, MessageCircle } from "lucide-react";
+import Disclosure from "@/components/Disclosure";
+import { HelpCircle, MessageCircle } from "lucide-react";
 
 export default function FAQ() {
-  const [openItems, setOpenItems] = useState<Set<string>>(new Set(["0-0"]));
-
-  const toggleItem = (id: string) => {
-    const newOpenItems = new Set(openItems);
-    if (newOpenItems.has(id)) {
-      newOpenItems.delete(id);
-    } else {
-      newOpenItems.add(id);
-    }
-    setOpenItems(newOpenItems);
-  };
-
   const faqSections = [
     {
       title: "General Information",
@@ -112,154 +99,112 @@ export default function FAQ() {
     },
   ];
 
-  useEffect(() => {
-    const allQA = faqSections.flatMap((section) =>
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqSections.flatMap((section) =>
       section.items.map((item) => ({
         "@type": "Question",
         name: item.title,
         acceptedAnswer: { "@type": "Answer", text: item.content },
       })),
-    );
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: allQA,
-    };
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "faq-schema";
-    script.textContent = JSON.stringify(schema);
-    document.head.appendChild(script);
-    return () => {
-      document.getElementById("faq-schema")?.remove();
-    };
-  }, []);
+    ),
+  };
 
   return (
     <div className="min-h-screen bg-background font-sans bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
       <Navbar isHomePage={false} />
+      <script
+        type="application/ld+json"
+        id="faq-schema"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, "\\u003c"),
+        }}
+      />
 
-      {/* Hero Content */}
-      <section className="pt-32 pb-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-100 border-2 border-black text-sm mb-6 text-purple-700 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <HelpCircle className="w-4 h-4" />
-            <span>Support Center</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black text-foreground mb-6">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Everything you need to know about using Shopstr Markets, Nostr, and
-            Bitcoin payments.
-          </p>
-        </div>
-      </section>
-
-      <main className="pb-24 pt-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="space-y-12">
-          {faqSections.map((section, sectionIndex) => (
-            <div key={sectionIndex}>
-              <h2 className="text-2xl font-black text-foreground mb-6 pl-4 border-l-4 border-black">
-                {section.title}
-              </h2>
-              <div className="grid gap-4">
-                {section.items.map((item, itemIndex) => {
-                  const id = `${sectionIndex}-${itemIndex}`;
-                  const isOpen = openItems.has(id);
-
-                  return (
-                    <Card
-                      key={itemIndex}
-                      className={`rounded-xl border-2 border-black transition-all duration-300 ${isOpen ? "bg-purple-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]" : "bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"}`}
-                    >
-                      <CardBody className="p-0">
-                        <h3>
-                          <button
-                            onClick={() => toggleItem(id)}
-                            aria-expanded={isOpen}
-                            aria-controls={`faq-panel-${id}`}
-                            id={`faq-trigger-${id}`}
-                            className="w-full flex items-center justify-between p-6 text-left"
-                          >
-                            <span
-                              className={`text-lg font-bold pr-8 ${isOpen ? "text-purple-900" : "text-foreground"}`}
-                            >
-                              {item.title}
-                            </span>
-                            <div
-                              className={`flex-shrink-0 rounded-lg border-2 border-black p-1 transition-all ${isOpen ? "bg-purple-600 text-white shadow-none" : "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
-                            >
-                              {isOpen ? (
-                                <Minus className="w-4 h-4" />
-                              ) : (
-                                <Plus className="w-4 h-4" />
-                              )}
-                            </div>
-                          </button>
-                        </h3>
-                        <div
-                          id={`faq-panel-${id}`}
-                          role="region"
-                          aria-labelledby={`faq-trigger-${id}`}
-                          className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-                        >
-                          <div className="overflow-hidden">
-                            <div className="px-6 pb-6 text-gray-600 leading-relaxed font-medium">
-                              {item.content}
-                            </div>
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  );
-                })}
-              </div>
+      <main>
+        {/* Hero Content */}
+        <section className="pt-32 pb-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-100 border-2 border-black text-sm mb-6 text-purple-700 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <HelpCircle className="w-4 h-4" />
+              <span>Support Center</span>
             </div>
-          ))}
-        </div>
+            <h1 className="text-4xl md:text-5xl font-black text-foreground mb-6">
+              Frequently Asked Questions
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Everything you need to know about using Shopstr Markets, Nostr,
+              and Bitcoin payments.
+            </p>
+          </div>
+        </section>
 
-        <div className="mt-20">
-          <Card className="bg-gray-900 text-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative">
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-
-            <CardBody className="p-6 md:p-12 text-center relative z-10">
-              <div className="w-16 h-16 bg-white/10 rounded-lg border-2 border-white/20 flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                <MessageCircle className="w-8 h-8 text-primary" />
+        <div className="pb-24 pt-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+          <div className="space-y-12">
+            {faqSections.map((section, sectionIndex) => (
+              <div key={sectionIndex}>
+                <h2 className="text-2xl font-black text-foreground mb-6 pl-4 border-l-4 border-black">
+                  {section.title}
+                </h2>
+                <div className="grid gap-4">
+                  {section.items.map((item, itemIndex) => (
+                    <Disclosure
+                      key={item.title}
+                      title={item.title}
+                      level={3}
+                      open={sectionIndex === 0 && itemIndex === 0}
+                    >
+                      {item.content}
+                    </Disclosure>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-2xl md:text-3xl font-black mb-4">
-                Still have questions?
-              </h3>
-              <p className="text-gray-400 mb-8 max-w-xl mx-auto text-lg">
-                Can't find what you're looking for? Feel free to reach out to
-                our community.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button
-                  size="lg"
-                  asChild
-                  className="bg-primary text-white rounded-lg px-8 py-6 text-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-                >
-                  <Link href="/">Back to Home</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black rounded-lg px-8 py-6 text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-                >
-                  <a
-                    href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
-                    target="_blank"
-                    rel="noopener noreferrer"
+            ))}
+          </div>
+
+          <div className="mt-20">
+            <Card className="bg-gray-900 text-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative">
+              {/* Background decoration */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
+
+              <CardBody className="p-6 md:p-12 text-center relative z-10">
+                <div className="w-16 h-16 bg-white/10 rounded-lg border-2 border-white/20 flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                  <MessageCircle className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black mb-4">
+                  Still have questions?
+                </h3>
+                <p className="text-gray-400 mb-8 max-w-xl mx-auto text-lg">
+                  Can't find what you're looking for? Feel free to reach out to
+                  our community.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <Button
+                    size="lg"
+                    asChild
+                    className="bg-primary text-white rounded-lg px-8 py-6 text-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                   >
-                    Contact Us 🤙
-                  </a>
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
+                    <a href="/">Back to Home</a>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    asChild
+                    className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black rounded-lg px-8 py-6 text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                  >
+                    <a
+                      href="https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Contact Us 🤙
+                    </a>
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+          </div>
         </div>
       </main>
 

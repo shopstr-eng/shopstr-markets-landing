@@ -1,4 +1,3 @@
-import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
@@ -25,7 +24,7 @@ export default function NotFound() {
             asChild
             className="w-full bg-primary text-white rounded-lg py-6 text-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
           >
-            <Link href="/">Back to Home</Link>
+            <a href="/">Back to Home</a>
           </Button>
         </CardContent>
       </Card>

@@ -23,7 +23,7 @@ client/src/routes.ts owns typed records for path, page key, canonical path, titl
 
 App accepts a loaded React page component and supplies the common provider tree. Keep NextUIProvider locale en-US. Remove unused query, toast and tooltip providers from the entry path because no pages consume them. Leave dormant component files alone.
 
-entry-server.tsx exports routes and async renderRoute(pathname), which resolves the route, awaits its page module and returns React HTML and route metadata. Build it with Vite SSR into dist/prerender. The browser build emits dist/public/.vite/manifest.json.
+entry-server.tsx exports routes and async renderRoute(pathname), which resolves the route, awaits its page module and returns React HTML and route metadata. Build it with Vite SSR into dist/prerender. The browser build emits dist/public/.vite/manifest.json. The exporter moves build metadata to dist/client-manifest.json and removes the empty public .vite directory before publishing. Browser verification reads this sibling manifest. Build metadata must not become a new public-file exception.
 
 main.tsx resolves window.location.pathname, awaits that page module and hydrates existing React markup. An empty development root uses createRoot. A failed page import leaves server HTML usable and reports the error. Native anchors perform document navigation, so the next page obtains its generated HTML and metadata without a second routing state machine.
 
@@ -48,10 +48,10 @@ We accept asynchronous module selection in return for one route registry. Route 
 - [x] Read poteto-mode Principles and ground current upstream using how.
 - [x] Frame the falsifiable outcome and preserve a passing baseline.
 - [x] Compare two architecture candidates and obtain an independent verdict.
-- [ ] Implement one coupled rendering change against these contracts.
-- [ ] Verify the actual production and development journeys independently.
-- [ ] Review spec compliance and maintainability, fix accepted findings, rerun affected checks.
-- [ ] Commit the spec, implementation and reproducible verification on the feature branch.
+- [x] Implement one coupled rendering change against these contracts.
+- [x] Verify the actual production and development journeys independently.
+- [x] Review spec compliance and maintainability, fix accepted findings, rerun affected checks.
+- [x] Commit the spec, implementation and reproducible verification on the feature branch.
 
 ## Throughput checkpoint
 

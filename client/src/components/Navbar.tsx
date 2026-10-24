@@ -61,6 +61,17 @@ export default function Navbar({ isHomePage = false }: NavbarProps) {
     };
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const closeMenuOnDesktop = () => {
+      if (desktop.matches) setIsMobileMenuOpen(false);
+    };
+
+    closeMenuOnDesktop();
+    desktop.addEventListener("change", closeMenuOnDesktop);
+    return () => desktop.removeEventListener("change", closeMenuOnDesktop);
+  }, []);
+
   return (
     <nav
       className={`fixed w-full z-50 transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"}`}

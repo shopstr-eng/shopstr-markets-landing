@@ -154,3 +154,7 @@
     color: hsl(0, 0%, 100%) !important;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}

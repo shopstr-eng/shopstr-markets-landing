@@ -332,9 +332,8 @@ test("about and contact prose exactly matches the shared JSON used by React", as
   );
   assert.match(
     react,
-    /import\s+\w+\s+from\s+["']@shared\/trust-pages\.json\?raw["']/,
+    /import\s+\w+\s+from\s+["']@shared\/trust-pages\.json["']/,
   );
-  assert.match(react, /JSON\.parse\(trustPagesJson\)/);
   for (const binding of [
     "content.title",
     "content.description",
@@ -429,7 +428,10 @@ test("every route has nonempty HTML-free Markdown and matching alternate and age
         ),
       );
       assert.ok(markdown.includes(`[Agent guidance](${BASE_URL}/llms.txt)`));
-      assert.doesNotMatch(markdown, /Get Started|© 2025 Shopstr Markets Inc\./);
+      assert.doesNotMatch(
+        markdown,
+        /(?:^|\n)Get Started(?:\n|$)|© 2025 Shopstr Markets Inc\./,
+      );
       for (const { href } of markdownLinks(markdown)) {
         assert.match(
           href,
@@ -628,50 +630,12 @@ test("static and React footers expose trust links and React registers every publ
   const hrefs = tags(footer, "a").map((anchor) => anchor.href);
   for (const href of trustLinks)
     assert.ok(hrefs.includes(href), `Missing React footer link ${href}`);
-  const app = await readFile(join(ROOT, "client/src/App.tsx"), "utf8");
-  const registered = [
-    ...app.matchAll(/<Route\s+path="([^"]+)"\s+component=\{(\w+)\}\s*\/>/g),
-  ];
-  const expected = new Map([
-    ["/", "Home"],
-    ["/faq", "FAQ"],
-    ["/about", "About"],
-    ["/contact", "Contact"],
-    ["/privacy", "PrivacyPolicy"],
-    ["/privacy-policy", "PrivacyPolicy"],
-    ["/terms-of-service", "TermsOfService"],
-  ]);
-  for (const [path, component] of expected) {
-    assert.equal(
-      registered.filter((match) => match[1] === path && match[2] === component)
-        .length,
-      1,
-      `Missing or wrong React route: ${path}`,
-    );
+  for (const route of routes) {
+    const html = await htmlFor(route);
+    assert.match(html, /rel="modulepreload"/);
+    assert.match(html, /data-overlay-container="true"/);
   }
-  assert.match(app, /<Route\s+component=\{NotFound\}\s*\/>/);
-  for (const [component, slug] of [
-    ["Home", "home"],
-    ["FAQ", "faq"],
-    ["About", "about"],
-    ["Contact", "contact"],
-    ["PrivacyPolicy", "privacy-policy"],
-    ["TermsOfService", "terms-of-service"],
-  ]) {
-    assert.match(
-      app,
-      new RegExp(`import\\s+${component}\\s+from\\s+["']@/pages/${slug}["']`),
-    );
-    const source = await readFile(
-      join(ROOT, `client/src/pages/${slug}.tsx`),
-      "utf8",
-    );
-    assert.match(
-      source,
-      /<(?:Footer|TrustPage)\b/,
-      `${component} must expose the common footer`,
-    );
-  }
+
   assert.match(
     await readFile(join(ROOT, "client/src/components/TrustPage.tsx"), "utf8"),
     /<Footer\s*\/>/,

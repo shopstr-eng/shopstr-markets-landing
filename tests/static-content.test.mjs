@@ -1,97 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  escapeHtml,
-  renderTrustPage,
-  pageToMarkdown,
-} from "../scripts/static-content.mjs";
+import { escapeHtml, pageToMarkdown } from "../scripts/static-content.mjs";
 
 const BASE_URL = "https://shopstrmarkets.com";
-const page = {
-  title: "A title",
-  description: "A description",
-  sections: [
-    {
-      title: "A section",
-      paragraphs: ["First paragraph.", "Second paragraph."],
-    },
-  ],
-};
-
 test("escapeHtml escapes all HTML-sensitive characters without losing text", () => {
   assert.equal(escapeHtml(`&<>"'`), "&amp;&lt;&gt;&quot;&#39;");
   assert.equal(escapeHtml("Nostr — Bitcoin"), "Nostr — Bitcoin");
   assert.equal(escapeHtml(123), "123");
-});
-
-test("renderTrustPage escapes titles, descriptions, section headings and every paragraph", () => {
-  const values = [
-    `<img src=x onerror="alert('title')"> & Title`,
-    `<script>alert("description")</script> & 'description'`,
-    `<a href="javascript:alert('section')">Section</a>`,
-    `<iframe src="bad">Paragraph & 'one'</iframe>`,
-    `<svg onload="alert('two')">Paragraph & two</svg>`,
-  ];
-  const html = renderTrustPage(
-    {
-      title: values[0],
-      description: values[1],
-      sections: [{ title: values[2], paragraphs: values.slice(3) }],
-    },
-    {
-      nav: "<nav>Trusted navigation</nav>",
-      footer: "<footer>Trusted footer</footer>",
-    },
-  );
-
-  for (const value of values) {
-    assert.ok(
-      html.includes(escapeHtml(value)),
-      `Missing escaped value: ${value}`,
-    );
-    assert.ok(!html.includes(value), `Unescaped content: ${value}`);
-  }
-  assert.doesNotMatch(html, /<(?:img|script|iframe|svg)\b/i);
-  assert.match(html, /<h1\b[^>]*>&lt;img/);
-  assert.match(html, /<h2\b[^>]*>&lt;a/);
-  assert.ok(html.includes("<nav>Trusted navigation</nav>"));
-  assert.ok(html.includes("<footer>Trusted footer</footer>"));
-});
-
-test("renderTrustPage emits real contact and helpful links, with contact-only details", () => {
-  const about = renderTrustPage(page, { nav: "", footer: "" });
-  const contact = renderTrustPage(page, { nav: "", footer: "", contact: true });
-  assert.doesNotMatch(about, /href="(?:mailto:|tel:)/);
-  assert.ok(about.includes('<a href="/contact">Contact us</a>'));
-  assert.ok(contact.includes('<a href="/about">About us</a>'));
-  assert.ok(
-    contact.includes(
-      '<a href="mailto:biz@shopstrmarkets.com">biz@shopstrmarkets.com</a>',
-    ),
-  );
-  assert.ok(
-    contact.includes('<a href="tel:+12062909736">+1 (206) 290-9736</a>'),
-  );
-  for (const href of [
-    "/faq",
-    "/privacy",
-    "/#marketplaces",
-    "https://github.com/shopstr-eng",
-    "https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e",
-  ]) {
-    for (const html of [about, contact])
-      assert.ok(html.includes(`href="${href}"`));
-  }
-  const markdown = pageToMarkdown(contact, `${BASE_URL}/contact`);
-  assert.ok(
-    markdown.includes(
-      "[biz@shopstrmarkets.com](mailto:biz@shopstrmarkets.com)",
-    ),
-  );
-  assert.ok(markdown.includes("[+1 (206) 290-9736](tel:+12062909736)"));
-  assert.ok(markdown.includes(`[About us](${BASE_URL}/about)`));
-  assert.ok(markdown.includes(`[Privacy Policy](${BASE_URL}/privacy)`));
-  assert.ok(markdown.includes(`[Our products](${BASE_URL}/#marketplaces)`));
 });
 
 test("pageToMarkdown converts all heading levels, inline text, lists and line breaks", () => {
@@ -200,4 +115,24 @@ test("pageToMarkdown excludes navigation, footer, scripts and styles, not main c
       `Leaked chrome or executable content: ${marker}`,
     );
   }
+});
+
+test("pageToMarkdown retains related navigation inside main but excludes site chrome", () => {
+  const markdown = pageToMarkdown(
+    '<nav><a href="/chrome">Chrome</a></nav><main><h1>Page</h1><nav aria-label="Related resources"><a href="/faq">FAQ</a><a href="/privacy">Privacy Policy</a></nav></main><footer>Footer text</footer>',
+    `${BASE_URL}/about`,
+  );
+  assert.ok(markdown.includes(`[FAQ](${BASE_URL}/faq)`));
+  assert.ok(markdown.includes(`[Privacy Policy](${BASE_URL}/privacy)`));
+  assert.doesNotMatch(markdown, /Chrome|Footer text/);
+});
+
+test("pageToMarkdown separates adjacent links without spacing away punctuation", () => {
+  const markdown = pageToMarkdown(
+    '<main><h1>Page</h1><p><a href="/start">Start</a><a href="/learn">Learn</a>.</p></main>',
+    `${BASE_URL}/`,
+  );
+  assert.ok(
+    markdown.includes(`[Start](${BASE_URL}/start) [Learn](${BASE_URL}/learn).`),
+  );
 });

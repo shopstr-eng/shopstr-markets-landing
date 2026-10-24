@@ -32,7 +32,11 @@ test("every exported document contains exactly its React-rendered page", async (
     await t.test(route.path, async () => {
       const rendered = await renderRoute(route.path);
       const html = await readFile(outputFile(route.path), "utf8");
-      assert.ok(html.includes(`<div id="root">${rendered.html}</div>`));
+      assert.ok(
+        html.includes(
+          `<div id="root" data-route="${route.path}">${rendered.html}</div>`,
+        ),
+      );
       assert.match(rendered.html, /data-overlay-container="true"/);
       assert.equal((rendered.html.match(/<main\b/g) ?? []).length, 1);
       assert.equal((rendered.html.match(/<h1\b/g) ?? []).length, 1);
@@ -143,5 +147,62 @@ test("the published directory excludes server rendering and build metadata", asy
   assert.ok(
     !source.includes("When contacting us, identify the product"),
     "Trust-page body content must remain in its lazy page chunk",
+  );
+});
+
+test("each exported root declares the exact route identity used for hydration", async () => {
+  for (const route of routes) {
+    const html = await readFile(outputFile(route.path), "utf8");
+    assert.ok(
+      html.includes(`<div id="root" data-route="${route.path}">`),
+      `Missing served document identity: ${route.path}`,
+    );
+  }
+});
+
+test("trust-page Markdown preserves every related-resource destination", async () => {
+  for (const path of ["/about", "/contact"]) {
+    const markdown = await readFile(
+      outputFile(path).replace(/\.html$/, ".md"),
+      "utf8",
+    );
+    for (const url of [
+      "https://shopstrmarkets.com/faq",
+      "https://shopstrmarkets.com/privacy",
+      `https://shopstrmarkets.com/${path === "/about" ? "contact" : "about"}`,
+      "https://shopstrmarkets.com/#marketplaces",
+      "https://github.com/shopstr-eng",
+      "https://njump.me/npub15dc33fyg3cpd9r58vlqge2hh8dy6hkkrjxkhluv2xpyfreqkmsesesyv6e",
+    ]) {
+      assert.ok(markdown.includes(`](${url})`), `Missing ${url} on ${path}`);
+    }
+  }
+});
+
+test("homepage Markdown keeps product categories and adjacent calls to action readable", async () => {
+  const markdown = await readFile(join(publicDir, "index.md"), "utf8");
+  for (const label of [
+    "Electronics",
+    "Art & Collectibles",
+    "Books",
+    "Clothing",
+    "Local Farms",
+    "Food Makers",
+    "Artisan Goods",
+    "Zero Platform Fees",
+    "Honey Cajeta",
+    "Goat Milk Caramel",
+    "Regenerative Farms",
+    "Locally Sourced",
+  ]) {
+    assert.ok(
+      markdown.split("\n").includes(`- ${label}`),
+      `Missing category boundary for ${label}`,
+    );
+  }
+  assert.ok(
+    markdown.includes(
+      "[Start Shopping ⚡](https://shopstrmarkets.com/#marketplaces) [Learn More](https://shopstrmarkets.com/#mission)",
+    ),
   );
 });

@@ -144,7 +144,7 @@ for (const route of routes) {
 
   html = html.replace(
     '<div id="root"></div>',
-    `<div id="root">${bodyContent}</div>`,
+    `<div id="root" data-route="${escapeHtml(route.path)}">${bodyContent}</div>`,
   );
 
   const outPath =

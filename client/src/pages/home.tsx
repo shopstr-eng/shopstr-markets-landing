@@ -253,20 +253,23 @@ export default function Home() {
                       goods. Trade everything from electronics to art, books to
                       clothing - all without restrictions.
                     </p>
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      <span className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <ul
+                      aria-label="Shopstr categories"
+                      className="flex flex-wrap gap-2 mb-8"
+                    >
+                      <li className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         Electronics
-                      </span>
-                      <span className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      </li>
+                      <li className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         Art & Collectibles
-                      </span>
-                      <span className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      </li>
+                      <li className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         Books
-                      </span>
-                      <span className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      </li>
+                      <li className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         Clothing
-                      </span>
-                    </div>
+                      </li>
+                    </ul>
                     <Button
                       size="lg"
                       className="bg-primary text-white w-fit rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-6 py-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
@@ -310,20 +313,23 @@ export default function Home() {
                       platform fees, and get paid directly - your customers stay
                       yours.
                     </p>
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                    <ul
+                      aria-label="Self-sown categories"
+                      className="flex flex-wrap gap-2 mb-8"
+                    >
+                      <li className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                         Local Farms
-                      </span>
-                      <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                      </li>
+                      <li className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                         Food Makers
-                      </span>
-                      <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                      </li>
+                      <li className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                         Artisan Goods
-                      </span>
-                      <span className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
+                      </li>
+                      <li className="bg-gray-800 border border-gray-600 text-gray-200 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                         Zero Platform Fees
-                      </span>
-                    </div>
+                      </li>
+                    </ul>
                     <Button
                       size="lg"
                       className="text-black bg-yellow-400 hover:bg-yellow-500 min-w-fit transition-all duration-300 font-bold px-6 py-6 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
@@ -371,21 +377,24 @@ export default function Home() {
                       regenerative farms. Discover Honey Cajeta — all of the
                       attitude, none of the additives.
                     </p>
-                    <div className="flex flex-wrap gap-2 mb-8">
+                    <ul
+                      aria-label="Naughty Goat Co. categories"
+                      className="flex flex-wrap gap-2 mb-8"
+                    >
                       {[
                         "Honey Cajeta",
                         "Goat Milk Caramel",
                         "Regenerative Farms",
                         "Locally Sourced",
                       ].map((tag) => (
-                        <span
+                        <li
                           key={tag}
                           className="bg-purple-100 border border-black text-purple-900 px-4 py-2 rounded-md text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                         >
                           {tag}
-                        </span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                     <Button
                       size="lg"
                       asChild

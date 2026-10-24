@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { readFile, mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir, cpus, loadavg } from "node:os";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { createStaticApp } from "../server/static-app.mjs";
+import {
+  resolveEvidenceDirectory,
+  observePageFailures,
+  waitForApplicationReady,
+} from "./browser-verification.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = process.argv.slice(2);
@@ -14,7 +20,7 @@ const options = new Map();
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--help") {
     console.log(
-      "Usage: npm run verify:browser -- [--public-dir PATH] [--output-dir PATH] [--baseline-dir PATH] [--samples N] [--doctor URL]\nUses an owned ephemeral server and fresh browser contexts. Set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH for an existing Chromium. Doctor only reads the supplied URL. Comparison uses at least five alternating cold loads. All evidence survives cleanup.",
+      "Usage: npm run verify:browser -- [--public-dir PATH] [--output-dir PATH] [--baseline-dir PATH] [--samples N] [--doctor URL]\nUses an owned ephemeral server and fresh browser contexts. Set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH for an existing Chromium. Doctor only reads the supplied URL. Evidence output must be outside the repository and public directory. Comparison uses at least five alternating cold loads. All evidence survives cleanup.",
     );
     process.exit(0);
   }
@@ -57,10 +63,6 @@ if (options.has("--doctor")) {
   process.exit(0);
 }
 
-const output = options.has("--output-dir")
-  ? resolve(options.get("--output-dir"))
-  : await mkdtemp(join(tmpdir(), "shopstr-browser-proof-"));
-await mkdir(output, { recursive: true });
 const samples = Number(options.get("--samples") ?? 5);
 assert.ok(
   Number.isInteger(samples) && samples >= 5 && samples <= 20,
@@ -69,6 +71,14 @@ assert.ok(
 const publicDir = resolve(
   options.get("--public-dir") ?? join(root, "dist/public"),
 );
+const requestedOutput =
+  options.get("--output-dir") ??
+  join(tmpdir(), `shopstr-browser-proof-${randomUUID()}`);
+const output = await resolveEvidenceDirectory(requestedOutput, {
+  publicDir,
+  repositoryDir: root,
+});
+await mkdir(output, { recursive: true });
 const result = {
   status: "running",
   settings: {
@@ -146,6 +156,9 @@ try {
     });
     try {
       const page = await plainContext.newPage();
+      const failures = observePageFailures(page, candidate, {
+        javaScriptEnabled: false,
+      });
       assert.equal((await page.goto(candidate + path)).status(), 200);
       await page.locator("main h1").waitFor();
       assert.equal(await page.locator("main").count(), 1);
@@ -188,6 +201,11 @@ try {
           await page.locator('main a[href="tel:+12062909736"]').count(),
         );
       }
+      assert.deepEqual(
+        failures,
+        [],
+        `No-JavaScript resource failures on ${path}`,
+      );
       const link = page.locator('footer a[href="/about"]').first();
       await Promise.all([page.waitForURL(candidate + "/about"), link.click()]);
       assert.ok((await page.locator("main h1").innerText()).length);
@@ -198,21 +216,8 @@ try {
     const context = await contextFor(candidate, { mobile: true });
     try {
       const page = await context.newPage();
-      const errors = [];
+      const errors = observePageFailures(page, candidate);
       const requests = [];
-      const httpFailures = [];
-      page.on("response", (response) => {
-        if (response.url().startsWith(candidate) && response.status() >= 400)
-          httpFailures.push(`${response.status()} ${response.url()}`);
-      });
-      page.on("pageerror", (error) => errors.push(error.message));
-      page.on("console", (message) => {
-        if (
-          message.type() === "error" &&
-          !/Failed to load resource/.test(message.text())
-        )
-          errors.push(message.text());
-      });
       page.on("request", (request) => {
         if (
           request.resourceType() === "script" &&
@@ -237,9 +242,7 @@ try {
         ).status(),
         200,
       );
-      await page.waitForFunction(
-        () => document.body.style.overflow === "unset",
-      );
+      await waitForApplicationReady(page, errors);
       assert.ok(
         await page.evaluate(
           () =>
@@ -269,7 +272,6 @@ try {
         assert.equal(await first.evaluate((node) => node.open), !before);
       }
       assert.deepEqual(errors, [], `Browser errors on ${path}`);
-      assert.deepEqual(httpFailures, [], `Failed local resources on ${path}`);
       proof.hydrated = {
         nodePreserved: true,
         errors,
@@ -309,15 +311,7 @@ try {
         await route.continue();
       });
       const page = await context.newPage();
-      const errors = [];
-      page.on("pageerror", (error) => errors.push(error.message));
-      page.on("console", (message) => {
-        if (
-          message.type() === "error" &&
-          !/Failed to load resource/.test(message.text())
-        )
-          errors.push(message.text());
-      });
+      const errors = observePageFailures(page, candidate);
       await page.goto(candidate + "/faq", { waitUntil: "commit" });
       const detail = page.locator("main details").first();
       await detail.waitFor();
@@ -327,9 +321,7 @@ try {
       assert.equal(changed, !before);
       releaseScripts();
       await page.waitForLoadState("networkidle");
-      await page.waitForFunction(
-        () => document.body.style.overflow === "unset",
-      );
+      await waitForApplicationReady(page, errors);
       assert.equal(
         await detail.evaluate((node) => node.open),
         changed,
@@ -374,6 +366,46 @@ try {
       await context.close();
     }
   }
+  result.rejectionChecks = [];
+  for (const fault of ["caught-bootstrap", "aborted-image"]) {
+    const context = await contextFor(candidate);
+    try {
+      if (fault === "caught-bootstrap") {
+        const home = dynamicPages.find(([key]) =>
+          key.endsWith("/pages/home.tsx"),
+        );
+        assert.ok(home);
+        await context.route(candidate + "/" + home[1].file, (route) =>
+          route.fulfill({
+            status: 200,
+            contentType: "application/javascript",
+            body: 'throw new Error("Verification startup failure"); export default function Page() {}',
+          }),
+        );
+      } else {
+        await context.route("**/assets/rocket-*.webp", (route) =>
+          route.abort(),
+        );
+      }
+      const page = await context.newPage();
+      const failures = observePageFailures(page, candidate);
+      await page.goto(candidate, { waitUntil: "networkidle" });
+      await page.locator("main h1").waitFor();
+      assert.ok(
+        failures.some((item) =>
+          fault === "caught-bootstrap"
+            ? item.kind === "console" &&
+              item.message.includes("Unable to load this page")
+            : item.kind === "network" && item.url.includes("rocket-"),
+        ),
+        `Verifier missed ${fault}`,
+      );
+      await assert.rejects(waitForApplicationReady(page, failures));
+      result.rejectionChecks.push({ fault, rejected: true, failures });
+    } finally {
+      await context.close();
+    }
+  }
   result.aliases = [];
   for (const path of [
     "/faq/",
@@ -381,28 +413,22 @@ try {
     "/privacy/index.html",
     "/%66aq",
     "/faq/?from=verification",
+    "/faq//index.html",
+    "//faq/index.html",
+    "/faq/%2findex.html",
+    "/%66aq//index.html",
   ]) {
     const context = await contextFor(candidate);
     try {
       const page = await context.newPage();
-      const errors = [];
-      page.on("pageerror", (error) => errors.push(error.message));
-      page.on("console", (message) => {
-        if (
-          message.type() === "error" &&
-          !/Failed to load resource/.test(message.text())
-        )
-          errors.push(message.text());
-      });
+      const errors = observePageFailures(page, candidate);
       assert.equal(
         (
           await page.goto(candidate + path, { waitUntil: "networkidle" })
         ).status(),
         200,
       );
-      await page.waitForFunction(
-        () => document.body.style.overflow === "unset",
-      );
+      await waitForApplicationReady(page, errors);
       const heading = await page.locator("main h1").innerText();
       assert.match(
         heading,
@@ -414,9 +440,7 @@ try {
         (await page.reload({ waitUntil: "networkidle" })).status(),
         200,
       );
-      await page.waitForFunction(
-        () => document.body.style.overflow === "unset",
-      );
+      await waitForApplicationReady(page, errors);
       assert.equal(await page.locator("main h1").innerText(), heading);
       assert.deepEqual(errors, [], `Alias hydration failed: ${path}`);
       result.aliases.push({ path, heading, refresh: true, errors });
@@ -469,15 +493,7 @@ try {
             }).observe({ type: "longtask", buffered: true });
           });
           const bodies = [];
-          const failures = [];
-          page.on("pageerror", (error) => failures.push(error.message));
-          page.on("response", (response) => {
-            if (response.url().startsWith(url) && response.status() >= 400)
-              failures.push(`${response.status()} ${response.url()}`);
-          });
-          page.on("requestfailed", (request) => {
-            if (request.url().startsWith(url)) failures.push(request.url());
-          });
+          const failures = observePageFailures(page, url);
           page.on("response", (response) => {
             if (
               response.url().startsWith(url) &&
@@ -491,7 +507,11 @@ try {
                     bytes: (await response.body()).length,
                   };
                 })().catch((error) => {
-                  failures.push(error.message);
+                  failures.push({
+                    kind: "body",
+                    url: response.url(),
+                    message: error.message,
+                  });
                   return { url: new URL(response.url()).pathname, bytes: 0 };
                 }),
               );
@@ -501,6 +521,7 @@ try {
             200,
           );
           await page.getByRole("heading", { level: 1 }).waitFor();
+          await waitForApplicationReady(page, failures);
           const scripts = await Promise.all(bodies);
           assert.deepEqual(failures, []);
           assert.ok(scripts.length > 0);

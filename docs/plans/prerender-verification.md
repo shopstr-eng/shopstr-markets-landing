@@ -1,15 +1,15 @@
 # Prerendering verification
 
-The application is implemented in e86f133 on perf/prerender-hydrate-routes, based on e517c3a. Origin main and upstream main were both confirmed at e517c3a after implementation.
+The initial application was implemented in e86f133 and its reviewed application fixes are in c0107f3 on perf/prerender-hydrate-routes, based on e517c3a. Origin main and upstream main were both confirmed at e517c3a after implementation.
 
 ## Checks
 
 - npm run check passes.
-- npm test builds the browser and SSR targets and passes 196 tests with no failures. The upstream baseline passed 164 tests.
+- npm test builds the browser and SSR targets and passes 204 tests with no failures. The upstream baseline passed 164 tests.
 - All seven public routes pass actual Chromium journeys with JavaScript disabled and enabled. Existing SSR main nodes retain identity after hydration.
-- Five browser alias journeys pass hydration and refresh: /faq/, /faq/index.html, /privacy/index.html, /%66aq, and /faq/?from=verification.
+- Nine browser alias journeys pass hydration and refresh, including trailing slashes, index.html, encoded characters, query strings, duplicate separators and encoded separators.
 - Native disclosures preserve a change made while JavaScript is blocked. A deliberately failed FAQ page-module download leaves content and native disclosures usable.
-- No unrelated page chunks are requested. No unexpected page errors, hydration errors, HTTP failures or network failures occur in successful journeys and measurement samples.
+- No unrelated page chunks are requested. Deliberate caught-startup and aborted-image faults are rejected, and evidence-directory tests cover direct, existing-symlink, dangling-symlink and repository paths. No unexpected page errors, hydration errors, HTTP failures or network failures occur in successful journeys and measurement samples.
 - Development mounts the empty shell, updates real FAQ text through HMR without a document reload, and restores the original text.
 - Existing tests retain metadata, Markdown, schema, contact data, aliases, 404s, CORS, content negotiation and public-resource contracts.
 
@@ -21,9 +21,9 @@ Five alternating samples per build use fresh Chromium contexts, disabled cache, 
 | --------------------------- | ---------------------------------- | --------------------------------- |
 | Homepage JavaScript         | 518,771 bytes, 518,771 to 518,771  | 394,254 bytes, 394,254 to 394,254 |
 | Largest contentful paint    | 8,280 ms, 8,276 to 8,288           | 6,400 ms, 6,396 to 6,444          |
-| Observed long-task blocking | 5 ms, 4 to 10                      | 0 ms, 0 to 0                      |
+| Observed long-task blocking | 1 ms, 0 to 4                       | 0 ms, 0 to 0                      |
 
-The homepage loads 24.0% fewer JavaScript body bytes. Local throttled LCP falls by 22.7%. These timings describe this diagnostic setup, not the deployed site. Observed long-task blocking is not Lighthouse TBT.
+The homepage loads 24.0% fewer JavaScript body bytes. Local throttled LCP falls by 22.8%. These timings describe this diagnostic setup, not the deployed site. Observed long-task blocking is not Lighthouse TBT.
 
 The limiting path in this setup is network delivery of the unchanged rocket image. Resource timing attributes LCP to the same 164,686-byte WebP in both builds. In the first baseline sample its request starts after the JavaScript-rendered page arrives; prerendering exposes it to the browser during HTML parsing. This removes the JavaScript dependency from image discovery. The exact resource timings and all ten samples are retained in the raw proof. CPU blocking is small, so this is not evidence of a major CPU-throughput improvement.
 
@@ -43,13 +43,13 @@ For the same before/after comparison, preserve dist/public from e517c3a, then ad
 
 Evidence retained on the implementation computer:
 
-- /private/tmp/shopstr-prerender-release-proof/results.json contains route, alias, failure-path and ten-sample results with resource timings.
-- /private/tmp/shopstr-prerender-release-proof contains desktop/mobile screenshots and accessibility snapshots.
-- /private/tmp/shopstr-dev-proof/results.json and server.log record development/HMR verification.
-- /private/tmp/shopstr-prerender-test.log and shopstr-prerender-check.log record the final application checks.
+- /private/tmp/shopstr-deep-review-verified/results.json contains route, alias, failure-path and ten-sample results with resource timings.
+- /private/tmp/shopstr-deep-review-verified contains desktop/mobile screenshots and accessibility snapshots.
+- /private/tmp/shopstr-deep-review-dev-proof/results.json and server.log record development/HMR verification.
+- /private/tmp/shopstr-deep-review-final-tests.log and shopstr-deep-review-final-check.log record the final application checks.
 
 ## Review and limits
 
-Independent review found no blocking application issue. Its benchmark HTTP-error and alias-browser coverage findings were fixed and executed. A minor median calculation issue for optional even sample counts was corrected; the recorded five-sample result is unaffected. The review used independent agents from the same configured model family.
+The subsequent [deep review](prerender-deep-review.md) found and fixed hydration, Markdown and verifier defects. Independent fix review found no remaining blocking issue. Its benchmark HTTP-error and alias-browser coverage findings were fixed and executed. A minor median calculation issue for optional even sample counts was corrected; the recorded five-sample result is unaffected. The review used independent agents from the same configured model family.
 
 Static publishing configuration is unchanged. No deployment or feature merge occurred. Published hidden-directory handling, CDN compression, HTTP/2 behavior and real-user timings remain outside local verification. Native page navigation intentionally requests each destination document.

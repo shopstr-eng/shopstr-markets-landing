@@ -4,7 +4,7 @@ The prerendered page stays visible while only its own interactive code loads.
 
 ## Sub-features
 
-Same main node before and after hydration; page/module isolation; mobile-menu toggles; disclosure interaction.
+Same main node before and after hydration; page/module isolation; mobile-menu toggles; disclosure interaction; host-normalized URL aliases; deliberate verifier fault rejection.
 
 ## How to get to it (user POV)
 
@@ -18,4 +18,4 @@ Run `npm run verify:browser -- --output-dir /private/tmp/shopstr-hydration-proof
 
 ## Gotchas
 
-Fresh contexts prevent cache carryover. Page chunks may share common dependencies. Only unrelated page-specific modules are forbidden. A remount or swallowed hydration error is a failure.
+Fresh contexts prevent cache carryover. Page chunks may share common dependencies. Only unrelated page-specific modules are forbidden. The served data-route chooses the hydration tree even when a host normalizes duplicate or encoded separators in the URL. A remount or swallowed hydration error is a failure.
